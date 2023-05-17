@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+  <xs:element name="sampleattribute">
+    <xs:complexType>
+      <xs:attribute name="category" use="required"/>
+      <xs:attribute name="value" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="experimentalfactor">
+    <xs:complexType>
+      <xs:attribute name="name" use="required"/>
+      <xs:attribute name="value" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="miamescore">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="value" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="arraydesign">
+    <xs:complexType>
+      <xs:attribute name="accession" use="required" type="xs:NCName"/>
+      <xs:attribute name="count" use="required" type="xs:integer"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="bioassaydatagroup">
+    <xs:complexType>
+      <xs:attribute name="arraydesignprovider" use="required"/>
+      <xs:attribute name="bioassaydatacubes" use="required" type="xs:integer"/>
+      <xs:attribute name="bioassays" use="required" type="xs:integer"/>
+      <xs:attribute name="dataformat" use="required" type="xs:NCName"/>
+      <xs:attribute name="id" use="required"/>
+      <xs:attribute name="isderived" use="required" type="xs:integer"/>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="bibliography">
+    <xs:complexType>
+      <xs:attribute name="accession" use="required" type="xs:anyURI"/>
+      <xs:attribute name="authors" use="required"/>
+      <xs:attribute name="doi"/>
+      <xs:attribute name="edition" use="required"/>
+      <xs:attribute name="issue" use="required"/>
+      <xs:attribute name="pages" use="required"/>
+      <xs:attribute name="publication" use="required"/>
+      <xs:attribute name="publisher" use="required"/>
+      <xs:attribute name="status" use="required"/>
+      <xs:attribute name="title" use="required"/>
+      <xs:attribute name="uri" use="required"/>
+      <xs:attribute name="volume" use="required"/>
+      <xs:attribute name="year" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="provider">
+    <xs:complexType>
+      <xs:attribute name="contact" use="required"/>
+      <xs:attribute name="email" use="required"/>
+      <xs:attribute name="role" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="protocol">
+    <xs:complexType>
+      <xs:attribute name="accession" use="required"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="experiment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="id" type="xs:integer"/>
+        <xs:element name="accession" type="xs:NCName" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="secondaryaccession" type="xs:string"/>
+        <xs:element name="name" type="xs:string"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="experimenttype" type="xs:string"/>
+        <xs:element name="releasedate" type="xs:date"/>
+        <xs:element name="submissiondate" type="xs:string"/>
+        <xs:element name="lastupdatedate" type="xs:string"/>
+        <xs:element name="samples" type="xs:integer"/>
+        <xs:element name="hybs" type="xs:integer"/>
+        <xs:element maxOccurs="unbounded" name="user" type="xs:integer"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sampleattribute"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="experimentalfactor"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="miamescore"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="arraydesign"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="bioassaydatagroup"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="bibliography"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="provider"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="experimentdesign" type="xs:string"/>
+        <xs:element  name="description" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="protocol"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="seqdatauri" type="xs:anyURI"/>
+        <xs:element minOccurs="0" name="anonymousreview" type="xs:NCName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="experiments">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="experiment"/>
+      </xs:sequence>
+      <xs:attribute name="retrieved" use="required" type="xs:dateTime"/>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

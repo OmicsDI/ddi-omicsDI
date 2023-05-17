@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringSecurityFiltersConfiguredInspection -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <!-- Maven information an autowired classes -->
+
+    <mongo:repositories base-package="uk.ac.ebi.ddi.service.db.repo" />
+    <context:component-scan base-package="uk.ac.ebi.ddi.service.db.service"/>
+    <context:property-placeholder location="classpath*:prop/common-override.properties" />
+
+    <!--<bean id="mongoclienturi" class="com.mongodb.MongoClientURI">
+        <constructor-arg name="uri" value="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.three}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" />
+    </bean>  &lt;!&ndash; MongoDbFactory &ndash;&gt;
+    <bean id="simpleMongoDbFactoryID" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
+        <constructor-arg ref="mongoclienturi" />
+    </bean>
+
+    &lt;!&ndash; MongoTemplate &ndash;&gt;
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="simpleMongoDbFactoryID" />
+    </bean>-->
+    <mongo:mongo-client  connection-string="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000"></mongo:mongo-client>
+    <mongo:db-factory id="simpleMongoDbFactoryID"  mongo-client-ref="mongoClient" />
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="simpleMongoDbFactoryID" />
+        <constructor-arg ref="mongoConverter" />
+    </bean>
+    <bean id="mongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+        <constructor-arg index="0" ref="simpleMongoDbFactoryID"/>
+        <constructor-arg index="1">
+            <bean class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
+        </constructor-arg>
+        <property name="mapKeyDotReplacement" value="__"/>
+    </bean>
+<bean id="synonymsService" class="uk.ac.ebi.ddi.service.db.service.enrichment.SynonymsService"/>
+<bean id="termInDBService" class="uk.ac.ebi.ddi.service.db.service.similarity.TermInDBService"/>
+<bean id="datasetService"  class="uk.ac.ebi.ddi.service.db.service.dataset.DatasetService" />
+<bean id="databaseService" class="uk.ac.ebi.ddi.service.db.service.database.DatabaseService" />
+<bean id="datasetStatusService" class="uk.ac.ebi.ddi.service.db.service.dataset.DatasetStatusService"/>
+
+<bean id="publicationService" class="uk.ac.ebi.ddi.service.db.service.publication.PublicationDatasetService" />
+<bean id="annotationService" class="uk.ac.ebi.ddi.annotation.service.synonyms.DDIAnnotationService"/>
+<bean id="similarsService"    class="uk.ac.ebi.ddi.service.db.service.dataset.DatasetSimilarsService" />
+<bean id="expOutputDatasetService" class="uk.ac.ebi.ddi.service.db.service.similarity.ExpOutputDatasetService"/>
+<bean id="ddiExpDataProcessService" class="uk.ac.ebi.ddi.annotation.service.crossreferences.DDIDatasetSimilarityService"/>
+<bean id="ddiExpDataImportService" class="uk.ac.ebi.ddi.annotation.service.synonyms.DDIExpDataImportService"/>
+<bean id="ddiDatasetSimilarityService" class="uk.ac.ebi.ddi.annotation.service.crossreferences.DDIDatasetSimilarityService"/>
+<bean id="enrichmentInfoService" class="uk.ac.ebi.ddi.service.db.service.enrichment.EnrichmentInfoService"/>
+    <bean id="ebeyeWsConfig" class="uk.ac.ebi.ddi.ebe.ws.dao.config.EbeyeWsConfigProd"/>
+<bean id="datasetAnnotationService" class="uk.ac.ebi.ddi.annotation.service.dataset.DDIDatasetAnnotationService"/>
+<bean id="databaseAnnotationService" class="uk.ac.ebi.ddi.annotation.service.database.DDIDatabaseAnnotationService" />
+<bean id="domainWsClient" class="uk.ac.ebi.ddi.ebe.ws.dao.client.domain.DomainWsClient">
+    <constructor-arg name="config" ref="ebeyeWsConfig"/>
+</bean>
+    <!--<bean id ="datasetCountService" class = "uk.ac.ebi.ddi.service.db.service.dataset.DatasetCountService" />-->
+    <bean id = "similarityCount" class="uk.ac.ebi.ddi.similarityCalculator.SimilarityCounts"/>
+    <bean id = "bioStudiesService" class="uk.ac.ebi.ddi.biostudies.BioStudiesService"/>
+    <!--<bean id="statisticsService" class="uk.ac.ebi.ddi.similarityCalculator.StatisticsService" />-->
+</beans>

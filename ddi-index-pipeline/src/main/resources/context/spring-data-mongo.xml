@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+   			http://www.springframework.org/schema/data/mongo
+    		http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+	<import resource="spring-data-mongo.xml" />
+	<mongo:repositories base-package="uk.ac.ebi.ddi.service.db.repo" />
+
+	<bean id="mongoclienturi" class="com.mongodb.MongoClientURI">
+		<constructor-arg name="uri" value="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.three}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}" />
+	</bean>
+	<!-- MongoDbFactory -->
+	<bean id="simpleMongoDbFactoryID" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
+		<constructor-arg ref="mongoclienturi" />
+	</bean>
+
+	<!-- MongoTemplate -->
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="simpleMongoDbFactoryID" />
+	</bean>
+
+	<bean id="mongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+		<constructor-arg index="0" ref="simpleMongoDbFactoryID"/>
+		<constructor-arg index="1">
+			<bean class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
+		</constructor-arg>
+		<property name="mapKeyDotReplacement" value="__"/>
+	</bean>
+
+
+	<bean id="service" class="uk.ac.ebi.ddi.service.db.service.logger.DatasetResourceService"/>
+    <bean id="accessService" class="uk.ac.ebi.ddi.service.db.service.logger.HttpEventService"/>
+	<bean id="termInDBService" class="uk.ac.ebi.ddi.service.db.service.similarity.TermInDBService"/>
+	<bean id="expOutputDatasetService" class="uk.ac.ebi.ddi.service.db.service.similarity.ExpOutputDatasetService"/>
+	<bean id="ddiExpDataImportService" class="uk.ac.ebi.ddi.annotation.service.synonyms.DDIExpDataImportService"/>
+	<bean id="ddiDatasetSimilarityService" class="uk.ac.ebi.ddi.annotation.service.crossreferences.DDIDatasetSimilarityService"/>
+	<bean id="datasetStatInfoService" class="uk.ac.ebi.ddi.service.db.service.similarity.DatasetStatInfoService"/>
+	<bean id="InDBServiceRepo" class="uk.ac.ebi.ddi.service.db.repo.similarity.ITermInDBRepoImpl"/>
+    <bean id="datasetService" class="uk.ac.ebi.ddi.service.db.service.dataset.DatasetService" />
+	<bean class="uk.ac.ebi.ddi.service.db.utils.CascadingMongoEventListener" />
+
+	<bean id="annotService" class="uk.ac.ebi.ddi.annotation.service.synonyms.DDIAnnotationService"/>
+	<bean id="termService" class="uk.ac.ebi.ddi.service.db.service.similarity.TermInDBService"/>
+	<bean id="enrichmentInfoService" class="uk.ac.ebi.ddi.service.db.service.enrichment.EnrichmentInfoService"/>
+	<bean id="synonymsService" class="uk.ac.ebi.ddi.service.db.service.enrichment.SynonymsService"/>
+	<bean id="mostAccessedDatasetService" class="uk.ac.ebi.ddi.service.db.service.dataset.MostAccessedDatasetService" />
+	<bean id="similarityCount" class="uk.ac.ebi.ddi.similarityCalculator.SimilarityCounts"/>
+	<bean id="reanalysisDataService" class="uk.ac.ebi.ddi.service.db.service.similarity.ReanalysisDataService" />
+	<bean id="citationClient" class="uk.ac.ebi.ddi.ebe.ws.dao.client.europmc.CitationClient">
+		<constructor-arg name="config" ref="ebeyeWsConfig"/>
+	</bean>
+	<bean id="datasetWsClient" class="uk.ac.ebi.ddi.ebe.ws.dao.client.dataset.DatasetWsClient">
+		<constructor-arg name="config" ref="ebeyeWsConfig"/>
+	</bean>
+	<bean id="domainWsClient" class="uk.ac.ebi.ddi.ebe.ws.dao.client.domain.DomainWsClient">
+		<constructor-arg name="config" ref="ebeyeWsConfig"/>
+	</bean>
+	<bean id="ebeyeWsConfig" class="uk.ac.ebi.ddi.ebe.ws.dao.config.EbeyeWsConfigProd"/>
+	<bean id="citationService" class="uk.ac.ebi.ddi.service.db.service.similarity.CitationService"/>
+	<bean id="ebiPubmedSearchService" class="uk.ac.ebi.ddi.service.db.service.similarity.EBIPubmedSearchService"/>
+	<!--<bean id ="datasetCountService" class = "uk.ac.ebi.ddi.service.db.service.dataset.DatasetCountService" />-->
+
+</beans>

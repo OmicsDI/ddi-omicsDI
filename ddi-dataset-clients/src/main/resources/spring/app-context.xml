@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <bean id="bioprojectsClient" class="uk.ac.ebi.ddi.api.readers.bioprojects.ws.client.BioprojectsClient">
+        <constructor-arg index="0" value="/tmp/testing/bioprojects/summary"/>
+        <constructor-arg index="1" ref="geoClient"/>
+    </bean>
+
+    <bean id="geoClient" class="uk.ac.ebi.ddi.api.readers.bioprojects.ws.client.GeoClient">
+        <constructor-arg index="0" value="/tmp/testing/bioprojects/geo"/>
+    </bean>
+    <bean id="enaClient" class="uk.ac.ebi.ddi.api.readers.ena.ws.client.EnaClient">
+        <constructor-arg index="0" value="/tmp/testing/BioProjectsEna"/>
+    </bean>
+    <bean id="GEOConfig" class="uk.ac.ebi.ddi.api.readers.geo.ws.client.GEOFTPProd">
+    </bean>
+    <bean id="gpmdbWsConfig" class="uk.ac.ebi.ddi.api.readers.gpmdb.ws.client.GPMDBWsConfigProd">
+    </bean>
+    <bean id="lincsProd" class="uk.ac.ebi.ddi.api.readers.lincs.ws.client.LINCSConfigProd">
+    </bean>
+    <bean id="massiveWsConfigProd" class="uk.ac.ebi.ddi.api.readers.massive.ws.client.MassiveWsConfigProd" />
+    <bean id="mwWsConfig" class="uk.ac.ebi.ddi.api.readers.mw.ws.client.MWWsConfigProd">
+    </bean>
+    <bean id="paxdbClient" class="uk.ac.ebi.ddi.api.readers.paxdb.ws.client.PaxDBClient">
+        <constructor-arg index="0" value="http://pax-db.org/downloads/latest/datasets/paxdb-abundance-files-v4.0.zip"/>
+        <constructor-arg index="1" value="http://pax-db.org/downloads/latest/omicsdb_export.tsv"/>
+        <constructor-arg index="2" value="http://pax-db.org/downloads/latest/UniProt_mappings/paxdb-uniprot-links-v4_0.zip"/>
+    </bean>
+    <bean class="org.springframework.web.client.RestTemplate">
+        <constructor-arg>
+            <bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+                <property name="readTimeout" value="20000"/>
+                <property name="connectTimeout" value="20000" />
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="DatasetService" class="uk.ac.ebi.ddi.service.db.service.dataset.DatasetService"> </bean>
+
+</beans>
+
+
+

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="protocols">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="protocol"/>
+      </xs:sequence>
+      <xs:attribute name="retrieved" use="required" type="xs:dateTime"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="protocol">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="id"/>
+        <xs:element ref="accession"/>
+        <xs:element ref="name"/>
+        <xs:element minOccurs="0" ref="user"/>
+        <xs:element ref="text"/>
+        <xs:element ref="type"/>
+        <xs:element ref="performer"/>
+        <xs:element ref="hardware"/>
+        <xs:element ref="software"/>
+        <xs:element ref="standardpublicprotocol"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="id" type="xs:integer"/>
+  <xs:element name="accession" type="xs:string"/>
+  <xs:element name="user" type="xs:integer"/>
+  <xs:element name="text" type="xs:string"/>
+  <xs:element name="type" type="xs:string"/>
+  <xs:element name="performer" type="xs:string"/>
+  <xs:element name="hardware" type="xs:string"/>
+  <xs:element name="software" type="xs:string"/>
+  <xs:element name="standardpublicprotocol" type="xs:string"/>
+  <xs:element name="parameter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name"/>
+        <xs:element ref="order"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="order" type="xs:integer"/>
+  <xs:element name="name" type="xs:string"/>
+</xs:schema>
