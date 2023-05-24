@@ -11,7 +11,13 @@ import java.util.Map;
  */
 public class ModelConstants {
 
-    public static final String MODEL_PKG = "uk.ac.ebi.ddi.arrayexpress.experimentsreader.model.experiments";
+    //public static final String MODEL_PKG = "uk.ac.ebi.ddi.arrayexpress.experimentsreader.model.experiments";
+//    public static final String MODEL_PKG = "uk.ac.ebi.ddi.api.readers.arrayexpress.experimentsreader.model.experiments";
+//    public static final String MODEL_PKG = "uk.ac.ebi.ddi.api.readers.arrayexpress.protocolsreader.model.protocols";
+
+    public static final String EXPERIMENT_MODEL_PKG = "uk.ac.ebi.ddi.api.readers.arrayexpress.experimentsreader.model.experiments";
+
+     public static final String PROTOCOL_MODEL_PKG = "uk.ac.ebi.ddi.api.readers.arrayexpress.protocolsreader.model.protocols";
     public static final String ARRAY_EXPRESS_EXPERIMENTS = "";
 
     private static Map<Class, QName> modelQNames = new HashMap<Class, QName>();

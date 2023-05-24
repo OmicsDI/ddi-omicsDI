@@ -14,20 +14,24 @@
 
 	<mongo:repositories base-package="uk.ac.ebi.ddi.service.db.repo"/>
 	<context:component-scan base-package="uk.ac.ebi.ddi.service.db.service"/>
-
+<!--
 	<bean id="mongoclienturi" class="com.mongodb.MongoClientURI">
 		<constructor-arg name="uri" value="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.three}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}" />
 	</bean>
-	<!-- MongoDbFactory -->
+	&lt;!&ndash; MongoDbFactory &ndash;&gt;
 	<bean id="simpleMongoDbFactoryID" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
 		<constructor-arg ref="mongoclienturi" />
 	</bean>
 
-	<!-- MongoTemplate -->
+	&lt;!&ndash; MongoTemplate &ndash;&gt;
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="simpleMongoDbFactoryID" />
+	</bean>-->
+	<mongo:db-factory client-uri="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" id="simpleMongoDbFactoryID"/>
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="simpleMongoDbFactoryID" />
+		<constructor-arg ref="mongoConverter" />
 	</bean>
-
 	<bean id="mongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
 		<constructor-arg index="0" ref="simpleMongoDbFactoryID"/>
 		<constructor-arg index="1">

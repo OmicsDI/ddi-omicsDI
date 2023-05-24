@@ -35,8 +35,10 @@ public abstract class AbstractClient extends RetryClient {
      */
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        int timeOut = 200000;
-        factory.setReadTimeout(timeOut);
+        int timeOut = 600000;
+
+        //factory.setReadTimeout(timeOut);
+        factory.setConnectionRequestTimeout(timeOut);
         factory.setConnectTimeout(timeOut);
         return factory;
     }

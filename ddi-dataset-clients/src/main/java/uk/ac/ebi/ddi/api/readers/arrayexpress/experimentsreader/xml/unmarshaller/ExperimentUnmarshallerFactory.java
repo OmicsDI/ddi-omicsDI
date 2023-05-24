@@ -31,7 +31,7 @@ public class ExperimentUnmarshallerFactory {
         try {
             // Lazy caching of the JAXB Context.
             if (jc == null) {
-                jc = JAXBContext.newInstance(ModelConstants.MODEL_PKG);
+                jc = JAXBContext.newInstance(ModelConstants.EXPERIMENT_MODEL_PKG);
             }
 
             //create unmarshaller

@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 import uk.ac.ebi.ddi.ddidomaindb.dataset.DSField;
 import uk.ac.ebi.ddi.pipeline.indexer.exception.DatabaseNotFoundException;
 import uk.ac.ebi.ddi.pipeline.indexer.tasklet.AbstractTasklet;
+import uk.ac.ebi.ddi.retriever.DatasetFileUrlRetriever;
 import uk.ac.ebi.ddi.retriever.DefaultDatasetFileUrlRetriever;
 import uk.ac.ebi.ddi.retriever.IDatasetFileUrlRetriever;
 import uk.ac.ebi.ddi.retriever.providers.*;
@@ -45,23 +46,56 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
 
     private boolean overwrite;
 
+    private Map<String, DatasetFileUrlRetriever> retrieverMap;
+
     public DatasetFileUrlRetrieveTasklet() {
+        retrieverMap = new HashMap<String,DatasetFileUrlRetriever>();
+        retrieverMap.put("ArrayExpress" , new ArrayExpressFileUrlRetriever(retriever));
+        retrieverMap.put("GEO" , new GEOFileUrlRetriever(retriever));
+        retrieverMap.put("BioModels" , new BioModelsFileUrlRetriever(retriever));
+        retrieverMap.put("ExpressionAtlas" , new ExpressionAtlasFileUrlRetriever(retriever));
+        retrieverMap.put("dbGaP" , new DbGapFileUrlRetriever(retriever));
+        retrieverMap.put("GNPS" , new GNPSFileUrlRetriever(retriever));
+        retrieverMap.put("JPOST Repository" , new JPostFileUrlRetriever(retriever));
+        retrieverMap.put("MassIVE" , new MassIVEFileUrlRetriever(retriever));
+        retrieverMap.put("LINCS" , new LincsFileUrlRetriever(retriever));
+        retrieverMap.put("PeptideAtlas" , new PeptideAtlasFileUrlRetriever(retriever));
+        retrieverMap.put("EVA" , new EVAFileUrlRetriever(retriever));
+        retrieverMap.put("MetaboLights" , new MetabolightsFileUrlRetriever(retriever));
+        retrieverMap.put("MetabolomicsWorkbench" , new MetabolomicsWorkbenchFileUrlRetriever(retriever));
+        retrieverMap.put("ENA" , new ENAFileUrlRetriever(retriever));
+
 
         // Initializing retrievers
-        retriever = new ArrayExpressFileUrlRetriever(retriever);
-        retriever = new GEOFileUrlRetriever(retriever);
-        retriever = new BioModelsFileUrlRetriever(retriever);
-        retriever = new ExpressionAtlasFileUrlRetriever(retriever);
-        retriever = new DbGapFileUrlRetriever(retriever);
-        retriever = new GNPSFileUrlRetriever(retriever);
-        retriever = new JPostFileUrlRetriever(retriever);
-        retriever = new MassIVEFileUrlRetriever(retriever);
-        retriever = new LincsFileUrlRetriever(retriever);
-        retriever = new PeptideAtlasFileUrlRetriever(retriever);
-        retriever = new EVAFileUrlRetriever(retriever);
-        retriever = new MetabolightsFileUrlRetriever(retriever);
-        retriever = new MetabolomicsWorkbenchFileUrlRetriever(retriever);
-        retriever = new ENAFileUrlRetriever(retriever);
+        /*if(databaseName.equalsIgnoreCase("ArrayExpress")){
+            retriever = new ArrayExpressFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("GEO")){
+            retriever = new GEOFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("BioModels")){
+            retriever = new BioModelsFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("ExpressionAtlas")){
+            retriever = new ExpressionAtlasFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("dbGaP")){
+            retriever = new DbGapFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("GNPS")){
+            retriever = new GNPSFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("JPOST Repository")){
+            retriever = new JPostFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("MassIVE")){
+            retriever = new MassIVEFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("LINCS")){
+            retriever = new LincsFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("PeptideAtlas")){
+            retriever = new PeptideAtlasFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("EVA")){
+            retriever = new EVAFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("MetaboLights")){
+            retriever = new MetabolightsFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("MetabolomicsWorkbench")){
+            retriever = new MetabolomicsWorkbenchFileUrlRetriever(retriever);
+        } else if (databaseName.equalsIgnoreCase("ENA")){
+            retriever = new ENAFileUrlRetriever(retriever);
+        }*/
     }
 
     private DatabaseDetail getDatabase(String accession) {
@@ -105,6 +139,7 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
 
     private void process(Dataset ds, int total) {
         Dataset dataset = datasetService.read(ds.getAccession(), ds.getDatabase());
+        retriever = retrieverMap.get(ds.getDatabase());
         if (!overwrite && !dataset.getFiles().isEmpty()) {
             return;
         }
@@ -165,4 +200,5 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
         Assert.notNull(databaseDetailService, "The dataset details service can't be null");
         Assert.notNull(datasetService, "The dataset service can't be null");
     }
+
 }
