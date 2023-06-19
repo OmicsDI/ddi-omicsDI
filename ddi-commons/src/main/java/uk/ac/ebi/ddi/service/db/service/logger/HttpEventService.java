@@ -204,7 +204,7 @@ public class HttpEventService implements IHttpEventService {
         }
         catch (Exception ex)
         {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
 
     }

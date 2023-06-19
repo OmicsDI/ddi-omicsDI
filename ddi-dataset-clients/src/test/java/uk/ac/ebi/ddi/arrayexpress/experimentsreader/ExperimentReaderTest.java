@@ -30,9 +30,6 @@ public class ExperimentReaderTest {
 
     @Test
     public void testGetExperiments() throws Exception {
-
         ExperimentReader experimentReader = new ExperimentReader(file);
-        System.out.println(experimentReader.getExperiments().getExperiment());
-
     }
 }

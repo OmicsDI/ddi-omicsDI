@@ -79,7 +79,6 @@ public class SimilarityCalculator {
                 formatter.printHelp("SimilarityCalculator", options);
             } else {
                 if (line.hasOption("dataType")) {
-                    System.out.println("the option is:" + line.getOptionValue(dataTypeOpt));
                     dataTypeInput = line.getOptionValue(dataTypeOpt);
                 }
             }

@@ -153,7 +153,11 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
             if (!dataset.getConfigurations().containsKey(DSField.Configurations.IGNORE_DATASET_FILE_RETRIEVER.key()) ||
                     !dataset.getConfigurations().get(DSField.Configurations.IGNORE_DATASET_FILE_RETRIEVER.key())
                             .equals("true")) {
-                urls = retriever.getDatasetFiles(dataset.getAccession(), dataset.getDatabase());
+                //urls = retriever.getDatasetFiles(dataset.getAccession(), dataset.getDatabase());
+                if(retriever == null) {
+                    retriever =  new DefaultDatasetFileUrlRetriever();
+                }
+                urls = retriever.getDatasetFiles(dataset);
             }
             boolean hasChange = false;
             Set<String> originalUrls = dataset.getAdditional().get(DSField.Additional.DATASET_FILE.getName());

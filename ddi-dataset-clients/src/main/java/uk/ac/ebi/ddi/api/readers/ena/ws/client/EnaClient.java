@@ -54,8 +54,6 @@ public class EnaClient {
     }
 
     public EnaDataset readFile(File file) throws Exception {
-        System.out.print(String.format("reading file %s\n", file.getName()));
-
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(file);
@@ -77,8 +75,6 @@ public class EnaClient {
         File dir = new File(filePath);
         FileFilter fileFilter = new WildcardFileFilter("*.xml");
 
-        System.out.print(String.format("reading %s file mask %s \n", filePath, fileFilter));
-
         //TODO: foreach
         String prnjid = "PRJNA17297"; //enaIndexInfo.id;
         try {
@@ -94,9 +90,6 @@ public class EnaClient {
         } catch (Exception ex) {
             LOGGER.error("Error processing " + prnjid + " : " + ex);
         }
-
-        System.out.print(String.format("found %d datasets\n", outDatasets.size()));
-
         return outDatasets.values();
     }
 

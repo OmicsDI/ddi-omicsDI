@@ -91,15 +91,11 @@ public class GenerateEnaOmicsXML implements IGenerator {
 
         String databaseName = "ENA";
 
-        System.out.print(String.format("processing database: %s \n", databaseName));
-
         datasets.forEach(dataset -> {
             if (dataset != null && dataset.getIdentifier() != null && dataset.getRepository().equals(databaseName)) {
                 entries.add(Transformers.transformAPIDatasetToEntry(dataset)); //
             }
         });
-
-        System.out.print(String.format("found datasets: %d \n", entries.size()));
 
         String filepath = outputFolder + "/" + databaseName + "_data.xml";
         FileWriter outputFile = new FileWriter(filepath);
@@ -113,7 +109,5 @@ public class GenerateEnaOmicsXML implements IGenerator {
         database.setEntries(entries);
         database.setEntryCount(entries.size());
         mm.marshall(database, outputFile);
-
-        System.out.print(String.format("exported %s %d to %s\n", databaseName, entries.size(), filepath));
     }
 }

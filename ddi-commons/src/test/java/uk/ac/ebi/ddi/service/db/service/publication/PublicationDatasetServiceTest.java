@@ -45,7 +45,6 @@ public class PublicationDatasetServiceTest {
     public void testFindByPubmedId() throws Exception {
 
         List<PublicationDataset> datasetList = publicationService.findByPubmedId("1");
-        System.out.println(datasetList);
 
     }
 }

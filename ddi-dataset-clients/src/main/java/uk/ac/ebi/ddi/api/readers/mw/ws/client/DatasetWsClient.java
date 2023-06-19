@@ -34,11 +34,29 @@ public class DatasetWsClient extends AbstractClient {
      * @return A list of entries and the facets included
      */
     public DatasetList getAllDatasets() {
+        DatasetList datasetList = new DatasetList();
+        String idRangePrefix = "ST00";
+        String number = "00";
+        Integer incrementNumber = 0;
+        int i = 0;
+        while(incrementNumber < 24){
+            DatasetList rangeDatasetList = getDatasetList(idRangePrefix + "" + number);
+            final int incrementalIndex = i;
+            rangeDatasetList.datasets.forEach((key, value) -> {
+                datasetList.datasets.put(key+String.valueOf(incrementalIndex) , value);
+            });
+            incrementNumber = i;
+            i++;
+            number = String.format("%0" + number.length() + "d", i);
+        }
+        return datasetList;
+    }
 
+    private DatasetList getDatasetList(String summaryRange) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
                 .scheme(config.getProtocol())
                 .host(config.getHostName())
-                .path("/rest/study/study_id/ST/summary");
+                .path("/rest/study/study_id/"+ summaryRange +"/summary");
 
         URI uri = builder.build().encode().toUri();
         return getRetryTemplate().execute(ctx -> restTemplate.getForObject(uri, DatasetList.class));
@@ -185,5 +203,10 @@ public class DatasetWsClient extends AbstractClient {
         URI uri = builder.build().encode().toUri();
         return getRetryTemplate().execute(ctx -> restTemplate.getForObject(uri, DiseaseList.class));
     }
+
+   /* public static void main(String[] args) {
+        DatasetWsClient datasetWsClient = new DatasetWsClient(new MWWsConfigProd());
+        datasetWsClient.getAllDatasets();
+    }*/
 
 }

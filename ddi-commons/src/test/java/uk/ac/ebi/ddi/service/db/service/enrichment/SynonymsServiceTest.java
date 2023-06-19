@@ -42,21 +42,18 @@ public class SynonymsServiceTest {
         Assert.assertEquals(word1.getId(), word11.getId());
         Assert.assertEquals(word1.getlabel(), word11.getlabel());
 
-        System.out.println(word1.getId());
 
         //Add a term without id
         Synonym word2 = wordService.insert("testWord2", null);
 
         Page<Synonym> allEntries = wordService.readAll(0, 1000000000);
-        System.out.println(allEntries.getSize());
         for (Synonym wordtemp : allEntries) {
             wordService.delete(wordtemp.getId());
         }
 
         allEntries = wordService.readAll(0, 1000000000);
-        System.out.println(allEntries.getSize());
         for (Synonym wordtemp : allEntries) {
-            System.out.println(wordtemp.toString());
+            //System.out.println(wordtemp.toString());
         }
 
     }
@@ -65,13 +62,12 @@ public class SynonymsServiceTest {
     public void readAll() {
         for (int i = 0; i < 100; i++) {
             Synonym word = new Synonym("testWord" + i, null);
-            System.out.println(word.getId());
 //            wordService.insert(word);
         }
 //        System.exit(1);
         Page<Synonym> synonymss = wordService.readAll(0, 100000000);
         for (Synonym wordtemp : synonymss) {
-            System.out.println(wordtemp.toString());
+//            System.out.println(wordtemp.toString());
         }
     }
 
@@ -79,14 +75,11 @@ public class SynonymsServiceTest {
     public void readAllSynonyms() {
 
         Page<Synonym> allEntries = wordService.readAll(0, 1000000000);
-        System.out.println(allEntries.getSize());
         for (Synonym wordtemp : allEntries) {
             wordService.delete(wordtemp.getId());
         }
 
         Synonym word = wordService.insert("testWord", null);
-        System.out.println("main word id:" + word.getId());
-        System.out.println("main word label:" + word.getlabel());
 //        for (int i = 0; i < 10; i++) {
 //            wordService.insertAsSynonym(word, "testWordSyno" + i);
 //        }
@@ -96,7 +89,7 @@ public class SynonymsServiceTest {
 
         Page<Synonym> synonymss = wordService.readAll(0, 1000);
         for (Synonym wordtemp : synonymss) {
-            System.out.println(wordtemp.toString());
+//            System.out.println(wordtemp.toString());
         }
     }
 

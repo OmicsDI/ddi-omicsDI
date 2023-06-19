@@ -32,7 +32,6 @@ public class ProtocolReaderTest {
     public void testGetExperiments() throws Exception {
 
         ProtocolReader experimentReader = new ProtocolReader(file);
-        System.out.println(experimentReader.getProtocols().getProtocol());
 
     }
 

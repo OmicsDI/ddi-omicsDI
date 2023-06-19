@@ -11,6 +11,7 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import uk.ac.ebi.ddi.annotation.service.database.DDIDatabaseAnnotationService;
 import uk.ac.ebi.ddi.annotation.service.dataset.DDIDatasetAnnotationService;
 import uk.ac.ebi.ddi.ddidomaindb.dataset.DSField;
@@ -61,8 +62,8 @@ public class DatasetImportTasklet extends AbstractTasklet {
             return RepeatStatus.FINISHED;
         }
 
-        for(int i= 0 ; i < files.length; )
-        Arrays.asList(files).parallelStream().forEach(file -> {
+        //for(int i= 0 ; i < files.length; )
+        Collections.synchronizedList(Arrays.asList(files)).parallelStream().forEach(file -> {
             try {
                 LOGGER.info("processing file:" + file);
 
@@ -101,10 +102,11 @@ public class DatasetImportTasklet extends AbstractTasklet {
                                     .addAdditionalField(DSField.Additional.SUBMITTER_KEYWORDS.key(), tr));
                         }
                     }
-                    LOGGER.debug("inserting: " + dataEntry.getId() + " " + db + "");
-                    LOGGER.info("before update of " + dataEntry.getId() + " omicstype is " + dataEntry.getAdditionalFieldValue("omics_type") + "");
+                    if(!CollectionUtils.isEmpty(dataEntry.getAdditionalFieldValues(DSField.Additional.DATASET_FILE.key()))){
+                        List<String> datasetFilesList = dataEntry.getAdditionalFieldValues(DSField.Additional.DATASET_FILE.key());
+
+                    }
                     dataEntry = updateOmicsType(dataEntry);
-                    LOGGER.info("after update of " + dataEntry.getId() + " omicstype is " + dataEntry.getAdditionalFieldValue("omics_type") + "");
                     datasetAnnotationService.insertDataset(dataEntry, db);
                     threadSafeList.add(new AbstractMap.SimpleEntry<>(dataEntry.getId(), db));
                     LOGGER.info("Dataset: " + dataEntry.getId() + " " + db + "has been added");

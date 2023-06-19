@@ -82,7 +82,6 @@ public class IDatasetRepoImpl implements IDatasetRepoExtension {
             result.add(o.accession);
         }*/
 
-        System.out.print(String.format("getSecondaryAccessions returns %d entries \n", result.size()));
 
         return result;
     }

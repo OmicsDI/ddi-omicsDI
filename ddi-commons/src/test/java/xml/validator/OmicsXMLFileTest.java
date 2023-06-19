@@ -51,8 +51,6 @@ public class OmicsXMLFileTest {
 
         Assert.assertEquals(entry.getName().getValue(), "Large scale qualitative and quantitative profiling of tyrosine phosphorylation using a combination of phosphopeptide immuno-affinity purification and stable isotope dimethyl labeling");
 
-        System.out.println(entry.toString());
-
     }
 
     @Test
@@ -102,9 +100,6 @@ public class OmicsXMLFileTest {
         Entry entry = reader.getEntryByIndex(index);
 
         Assert.assertEquals(entry.getName().getValue(), "Large scale qualitative and quantitative profiling of tyrosine phosphorylation using a combination of phosphopeptide immuno-affinity purification and stable isotope dimethyl labeling");
-
-        System.out.println(entry.toString());
-
     }
 
     @Test
@@ -115,6 +110,6 @@ public class OmicsXMLFileTest {
 
         List<Tuple> errors = OmicsXMLFile.validateSemantic(this.file);
         //errors.stream().forEach(r-> System.out.println(r.getValue().toString()));
-        errors.stream().filter(r -> r.getKey().equals("Error")).forEach(r-> System.out.println(r.getValue().toString()));
+//        errors.stream().filter(r -> r.getKey().equals("Error")).forEach(r-> System.out.println(r.getValue().toString()));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import uk.ac.ebi.ddi.ddidomaindb.database.DB;
 import uk.ac.ebi.ddi.retriever.DatasetFileUrlRetriever;
 import uk.ac.ebi.ddi.retriever.IDatasetFileUrlRetriever;
+import uk.ac.ebi.ddi.service.db.model.dataset.Dataset;
 
 import java.io.IOException;
 import java.net.URI;
@@ -50,5 +51,10 @@ public class BioModelsFileUrlRetriever extends DatasetFileUrlRetriever {
     @Override
     protected boolean isSupported(String database) {
         return database.equals(DB.BIOMODELS.getDBName()) || database.equals(DB.BIOMODELS_SHORT.getDBName());
+    }
+
+    @Override
+    public Set<String> getDatasetFiles(Dataset dataset) throws IOException {
+        return getDatasetFiles(dataset.getAccession(),dataset.getDatabase());
     }
 }

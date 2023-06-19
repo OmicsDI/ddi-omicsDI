@@ -66,8 +66,6 @@ public class DatasetStatInfoService implements IDatasetStatInfoService {
 
     @Override
     public Page<DatasetStatInfo> readAll(int pageStart, int size) {
-        System.out.println("pageStart and size:" + pageStart + "," + size);
-//        System.exit(1);
         if(size<1){return null;}
         return accessRepo.findAll(PageRequest.of(pageStart, size));
     }

@@ -66,9 +66,7 @@ public class GenerateExpressionAtlasFile {
             }else{
                 File omicsDIFile = new File (line.getOptionValue(omicsDIFileStr));
                 OmicsXMLFile experiments = new OmicsXMLFile(new File (line.getOptionValue(experimentFileStr)));
-                System.out.println(experiments.getAllEntries().size());
                 List<Entry> genes = FastOmicsDIReader.getInstance(new File(line.getOptionValue(geneFileStr))).read();
-                System.out.println(genes.size());
                 generate(experiments, genes, omicsDIFile);
             }
 

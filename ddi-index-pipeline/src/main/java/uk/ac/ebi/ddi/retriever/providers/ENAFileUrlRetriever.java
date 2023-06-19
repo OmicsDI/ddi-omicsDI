@@ -10,6 +10,7 @@ import uk.ac.ebi.ddi.annotation.utils.Constants;
 import uk.ac.ebi.ddi.ddidomaindb.database.DB;
 import uk.ac.ebi.ddi.retriever.DatasetFileUrlRetriever;
 import uk.ac.ebi.ddi.retriever.IDatasetFileUrlRetriever;
+import uk.ac.ebi.ddi.service.db.model.dataset.Dataset;
 import uk.ac.ebi.ddi.similarityCalculator.SimilarityCounts;
 
 import javax.xml.xpath.XPath;
@@ -164,4 +165,8 @@ public class ENAFileUrlRetriever extends DatasetFileUrlRetriever {
         return DB.ENA.getDBName().equals(database);
     }
 
+    @Override
+    public Set<String> getDatasetFiles(Dataset dataset) throws IOException {
+        return getDatasetFiles(dataset.getAccession(),dataset.getDatabase());
+    }
 }

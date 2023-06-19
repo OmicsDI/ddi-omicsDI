@@ -33,6 +33,6 @@ public class Constants {
      * Some keywords to be parse
      */
     public static final String SRM_KEYWORD = "SRM";
-    public static final String PXURL = "http://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=";
+    public static final String PXURL = "https://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=";
 
 }

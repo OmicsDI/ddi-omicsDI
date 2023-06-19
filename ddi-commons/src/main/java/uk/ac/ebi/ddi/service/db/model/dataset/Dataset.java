@@ -113,12 +113,10 @@ public class Dataset implements Serializable, IDataset{
         this.initHashCode = initHashCode();
     }
 
-    @Deprecated
     public Map<String, Set<String>> getFiles() {
         return files;
     }
 
-    @Deprecated
     public void setFiles(Map<String, Set<String>> files) {
         this.files = files;
     }

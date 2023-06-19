@@ -6,6 +6,7 @@ import uk.ac.ebi.ddi.extservices.net.FtpUtils;
 import uk.ac.ebi.ddi.extservices.net.UriUtils;
 import uk.ac.ebi.ddi.retriever.DatasetFileUrlRetriever;
 import uk.ac.ebi.ddi.retriever.IDatasetFileUrlRetriever;
+import uk.ac.ebi.ddi.service.db.model.dataset.Dataset;
 
 import java.io.IOException;
 import java.net.URI;
@@ -43,5 +44,10 @@ public class ExpressionAtlasFileUrlRetriever extends DatasetFileUrlRetriever {
     @Override
     protected boolean isSupported(String database) {
         return database.equals(DB.EXPRESSION_ATLAS.getDBName());
+    }
+
+    @Override
+    public Set<String> getDatasetFiles(Dataset dataset) throws IOException {
+        return getDatasetFiles(dataset.getAccession(),dataset.getDatabase());
     }
 }

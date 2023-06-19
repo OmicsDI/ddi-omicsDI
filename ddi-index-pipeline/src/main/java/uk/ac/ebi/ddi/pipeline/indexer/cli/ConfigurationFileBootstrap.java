@@ -91,7 +91,6 @@ public class ConfigurationFileBootstrap {
                             typeConnection));
                 }
             }
-            System.out.println(prop.toString());
         }
         return dataSources;
     }

@@ -96,9 +96,9 @@ public class DownloadFilesFromFTPTasklet extends AbstractTasklet {
         LOGGER.info("file names are {}", ftpFiles);
         for (FTPFile file : ftpFiles) {
             LOGGER.info("file name is " + file.getName());
-            LOGGER.info("does file has pattern {}", file.getName().contains(pattern));
+            LOGGER.info("does file has pattern {}", file.getName().equals(pattern));
             if ((file.isFile() || file.isSymbolicLink())
-                    && (pattern != null && !pattern.isEmpty() && file.getName().contains(pattern))) {
+                    && (pattern != null && !pattern.isEmpty() && file.getName().equals(pattern))) {
                 LOGGER.info("File is " + file.getName());
                 try (OutputStream output = new FileOutputStream(
                         targetDirectory.getFile() + "/" + file.getName())) {

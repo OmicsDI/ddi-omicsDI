@@ -132,7 +132,7 @@ public class GeneratePxOmicsXML implements IGenerator {
             if (pageBuffer.containsKey(urlString)) {
                 return pageBuffer.get(urlString);
             }
-
+            LOGGER.warn(urlString);
             // create the url
             URL url = new URL(urlString);
 

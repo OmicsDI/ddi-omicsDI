@@ -70,7 +70,6 @@ public class SimpleQCstats {
                 }
             }
         }
-        System.out.println("The project-assay with the major difference between spectra and identified spectra is: " + projectID + "\t" + assayID);
     }
 
     @Test
@@ -104,15 +103,12 @@ public class SimpleQCstats {
         double percentId  = ((double)countIdent/(double)countSpectra)*100;
 
         DecimalFormat df = new DecimalFormat("#.##");
-        System.out.println("The % of unidentifiedSpectra: " + df.format(percentNon) + "\t" + "the % of identified: " + df.format(percentId));
     }
 
     @Test
     public void getListofProjectwithSetofSpectrainDistribution() throws Exception {
 
         Integer res = projectCountWsClient.getProjectCount("");
-
-        System.out.println(res);
 
         int i =0;
 
@@ -135,14 +131,11 @@ public class SimpleQCstats {
                 double percentId  = ((double)countIdent/(double)countSpectra)*100;
 
                 DecimalFormat df = new DecimalFormat("#.##");
-                System.out.print("Project: " + project.accession + "\t");
-                for(String specie: project.species)
-                   System.out.print(specie + "\t");
-                System.out.println("The % of unidentifiedSpectra: " + df.format(percentNon) + "\t" + "the % of identified: " + df.format(percentId) + " total: " + countSpectra);
+//                for(String specie: project.species)
+//                   System.out.print(specie + "\t");
 
             }
         }
-        System.out.println(i);
     }
 
 }

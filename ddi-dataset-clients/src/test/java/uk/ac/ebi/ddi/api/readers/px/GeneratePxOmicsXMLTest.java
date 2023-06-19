@@ -19,15 +19,14 @@ import uk.ac.ebi.ddi.api.readers.px.xml.io.PxReader;
  */
 public class GeneratePxOmicsXMLTest {
 
-    //String url = "http://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=PXD005952&outputMode=XML";
-    //String url = "http://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=PXD005952&outputMode=XML";
-    String url = "http://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=PXD036697&outputMode=XML";
+    //String url = "https://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=PXD005952&outputMode=XML";
+    //String url = "https://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=PXD005952&outputMode=XML";
+    String url = "https://proteomecentral.proteomexchange.org/cgi/GetDataset?ID=PXD036697&outputMode=XML";
 
     @Test
     public void getPage() throws Exception {
         String page = GeneratePxOmicsXML.getPage(url);
         PxReader dataset = ReaderPxXML.parseDocument(page);
-        System.out.println(dataset.getFullLink());
     }
 
 }

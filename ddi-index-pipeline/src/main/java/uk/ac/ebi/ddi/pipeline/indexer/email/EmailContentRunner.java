@@ -31,6 +31,5 @@ public class EmailContentRunner {
                 "reviewerpassword", "TEST-BIOSD-ID");
         final SubmissionEmailContentGenerator submissionEmailContentGenerator = new SubmissionEmailContentGenerator(
                         springTemplateEngine, "pride-submission-email.html", summary);
-        System.out.println(submissionEmailContentGenerator.generate());
     }
 }

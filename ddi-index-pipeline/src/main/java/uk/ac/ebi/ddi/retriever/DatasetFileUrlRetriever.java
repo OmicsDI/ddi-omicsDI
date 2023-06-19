@@ -13,6 +13,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ddi.extservices.utils.RetryClient;
+import uk.ac.ebi.ddi.service.db.model.dataset.Dataset;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public abstract class DatasetFileUrlRetriever extends RetryClient implements IDatasetFileUrlRetriever {
 
@@ -60,6 +62,11 @@ public abstract class DatasetFileUrlRetriever extends RetryClient implements IDa
             result.addAll(getAllDatasetFiles(accession, database));
         }
         return result;
+    }
+
+    @Override
+    public Set<String> getDatasetFiles(Dataset dataset) throws IOException {
+        return getDatasetFiles(dataset.getAccession(),dataset.getDatabase());
     }
 
     private ClientHttpRequestFactory clientHttpRequestFactory()

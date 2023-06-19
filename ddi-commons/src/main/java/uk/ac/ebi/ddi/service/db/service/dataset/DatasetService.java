@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import uk.ac.ebi.ddi.ddidomaindb.dataset.DSField;
 import uk.ac.ebi.ddi.service.db.model.aggregate.BaseAggregate;
 import uk.ac.ebi.ddi.service.db.model.dataset.*;
@@ -80,11 +81,14 @@ public class DatasetService implements IDatasetService {
             existingDataset.setDates(dataset.getDates());
             existingDataset.setName(dataset.getName());
             existingDataset.setFilePath(dataset.getFilePath());
-//            We set the InitHashCode only during the processing of creation
-//            existingDataset.setInitHashCode(dataset.getInitHashCode());
+            //TODO : Need to Fix as part of https://www.ebi.ac.uk/panda/jira/browse/OMDI-48 ticket
+            Map<String,Set<String>> datasetFilesMap = new HashMap<String,Set<String>>();
+            if(!CollectionUtils.isEmpty(dataset.getAdditional().get(DSField.Additional.DATASET_FILE.key())) && dataset.getAdditional().get(DSField.Additional.DATASET_FILE.key()).size() > 0){
+                Set<String> datasetFiles = dataset.getAdditional().get(DSField.Additional.DATASET_FILE.key());
+                datasetFilesMap.put(dataset.getAccession(),datasetFiles);
+                existingDataset.setFiles(datasetFilesMap);
+            }
             existingDataset.setScores(dataset.getScores());
-//            This line will override the files fetched from another pipeline
-//            existingDataset.setFiles(dataset.getFiles());
             return datasetAccessRepo.save(existingDataset);
         }
 

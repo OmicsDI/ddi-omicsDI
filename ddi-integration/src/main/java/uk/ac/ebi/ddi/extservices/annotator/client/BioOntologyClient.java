@@ -142,8 +142,6 @@ public class BioOntologyClient extends WsClient {
         String url = String.format("%s://%s/ontologies/%s/classes/%s?apikey=%s",
                 config.getProtocol(), config.getHostName(), ontology, term, Constants.OBO_KEY);
         LOGGER.debug(url);
-        System.out.println(url);
-
         return this.restTemplate.getForObject(url, SynonymQuery.class);
     }
 

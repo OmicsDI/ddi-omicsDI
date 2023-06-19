@@ -116,6 +116,7 @@ public class DDIDatasetAnnotationService {
                    ) {
                 LOGGER.info("Inithashcode of " + dbDataset.getAccession() + " is changed, previous: {}, current: {}",
                         currentDataset.getInitHashCode(), dbDataset.getInitHashCode());
+
                 updateDataset(currentDataset, dbDataset);
             }
         } else {
@@ -155,7 +156,7 @@ public class DDIDatasetAnnotationService {
                         );
                     }
                 } catch (Exception ex) {
-                    LOGGER.info("exception while annotation data", ex.getMessage().toString());
+                    LOGGER.info("exception while annotation data with publication Id "+pubmedId+" and accession "+exitingDataset.getAccession(), ex.getMessage().toString());
                 }
             }
         }

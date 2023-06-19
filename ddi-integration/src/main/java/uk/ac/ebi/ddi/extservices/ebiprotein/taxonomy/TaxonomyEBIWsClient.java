@@ -45,7 +45,6 @@ public class TaxonomyEBIWsClient extends WsClient {
                         config.getProtocol(), config.getHostName(), id);
                 //Todo: Needs to be removed in the future, this is for debugging
                 LOGGER.debug(url);
-                System.out.println(url);
                 return this.restTemplate.getForObject(url, EBITaxonomyEntry.class);
             }
         } catch (HttpClientErrorException e) {

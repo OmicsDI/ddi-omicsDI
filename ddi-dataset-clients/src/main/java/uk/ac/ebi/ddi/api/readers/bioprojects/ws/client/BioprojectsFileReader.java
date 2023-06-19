@@ -139,7 +139,8 @@ public class BioprojectsFileReader {
                 String formattedDate = formatter.format(date);
                 dataset.addDate("publication", formattedDate);
             } catch (ParseException exception) {
-                System.out.print("cannot parse date:" + exception.getMessage());
+                exception.printStackTrace();
+//                System.out.print("cannot parse date:" + exception.getMessage());
             }
         }
 

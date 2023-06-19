@@ -17,34 +17,17 @@
     <context:component-scan base-package="uk.ac.ebi.ddi.service.db.service"/>
     <context:property-placeholder location="classpath*:prop/common.properties" />
 
-    <!--<mongo:mongo-client id="mongoClient"  connection-string="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000"></mongo:mongo-client>
-    <mongo:db-factory  id="simpleMongoDbFactoryID"  mongo-client-ref="mongoClient" /> -->
-    <mongo:db-factory client-uri="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" id="simpleMongoDbFactoryID"/>
+    <mongo:db-factory client-uri="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" id="mongoDbFactory"/>
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg ref="simpleMongoDbFactoryID" />
+        <constructor-arg ref="mongoDbFactory" />
         <constructor-arg ref="mongoConverter" />
     </bean>
 
-
-    <!--<bean id="mongoclienturi" class="com.mongodb.MongoClientURI">
-        <constructor-arg name="uri" value="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" />
-    </bean>
-    &lt;!&ndash; MongoDbFactory &ndash;&gt;
-    <bean id="simpleMongoDbFactoryID" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
-        <constructor-arg ref="mongoclienturi" />
-    </bean>
-
-    &lt;!&ndash; MongoTemplate &ndash;&gt;
-    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg ref="simpleMongoDbFactoryID" />
-    </bean>-->
-
+    <bean id="mappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
     <bean id="mongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
-        <constructor-arg index="0" ref="simpleMongoDbFactoryID"/>
-        <constructor-arg index="1">
-            <bean class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
-        </constructor-arg>
-        <property name="mapKeyDotReplacement" value="__"/>
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mappingContext" ref="mappingContext"/>
+        <property name="mapKeyDotReplacement"  value="___"/>
     </bean>
 
     <bean id="synonymsService" class="uk.ac.ebi.ddi.service.db.service.enrichment.SynonymsService"/>

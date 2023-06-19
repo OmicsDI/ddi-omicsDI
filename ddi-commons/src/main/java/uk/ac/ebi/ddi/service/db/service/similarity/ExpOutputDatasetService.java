@@ -52,8 +52,6 @@ public class ExpOutputDatasetService implements IExpOutputDatasetService {
 
     @Override
     public Page<ExpOutputDataset> readAll(int pageStart, int size) {
-        System.out.println("pageStart and size:" + pageStart + "," + size);
-//        System.exit(1);
         if (size<1) {
             return null;
         }

@@ -49,7 +49,6 @@ public class TermInDBService implements ITermInDBService {
 
     @Override
     public Page<TermInDB> readAll(int pageStart, int size) {
-        System.out.println("total in collection:" + accessRepo.count());
         return accessRepo.findAll(PageRequest.of(pageStart, size));
     }
 

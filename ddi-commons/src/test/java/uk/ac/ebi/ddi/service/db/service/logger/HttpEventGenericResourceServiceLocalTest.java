@@ -53,7 +53,6 @@ public class HttpEventGenericResourceServiceLocalTest {
         service.save(datasetResource);
 
         Page<DatasetResource> allEntries = service.readAll(0,20);
-        System.out.println(allEntries.getSize());
 
     }
 
@@ -77,7 +76,6 @@ public class HttpEventGenericResourceServiceLocalTest {
 
         event = eventService.save(event);
 
-        System.out.println(event.toString());
     }
 
     @Test
@@ -90,7 +88,7 @@ public class HttpEventGenericResourceServiceLocalTest {
         }
         Page<DatasetResource> datassetAccessList = service.readAll(0, 100);
         for(DatasetResource dat: datassetAccessList){
-            System.out.println(dat.toString());
+//            System.out.println(dat.toString());
         }
     }
 
@@ -104,7 +102,6 @@ public class HttpEventGenericResourceServiceLocalTest {
             service.save(datasetResource);
         }
         DatasetResource datasetResource = service.read("PXD00013", "PRIDE");
-        System.out.println(datasetResource.toString());
     }
 
     @Test
@@ -138,10 +135,8 @@ public class HttpEventGenericResourceServiceLocalTest {
             event.setLogSource("/loganame");
             event.setRawMessage("simple message with the original log message");
             event = eventService.save(event);
-            System.out.println(event.toString());
         }
 
-        System.out.println(eventService.getLongEventService(dataset.getAccession(), dataset.getDatabase()));
     }
 
     @Test
@@ -165,10 +160,8 @@ public class HttpEventGenericResourceServiceLocalTest {
             event.setLogSource("/loganame");
             event.setRawMessage("simple message with the original log message");
             event = eventService.save(event);
-            System.out.println(event.toString());
         }
 
-        System.out.println(eventService.getEventByResourceId(dataset.getId()));
     }
 
     @Test
@@ -199,12 +192,9 @@ public class HttpEventGenericResourceServiceLocalTest {
             event.setLogSource("/loganame");
             event.setRawMessage("simple message with the original log message");
             event = eventService.save(event);
-            System.out.println(event.toString());
         }
 
-        System.out.println(eventService.getHttpEventbyResource(dataset).size());
         Map<Tuple<String, String>, Integer> eventList = eventService.moreAccessedDatasetResource(5);
-        System.out.println(eventList.size());
 
     }
 

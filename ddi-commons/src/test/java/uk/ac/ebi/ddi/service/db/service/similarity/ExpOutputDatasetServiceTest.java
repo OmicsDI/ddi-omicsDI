@@ -35,7 +35,7 @@ public class ExpOutputDatasetServiceTest {
     public void testReadAll() throws Exception {
         Page<ExpOutputDataset> datasets = expOutputDatasetService.readAll(0, 10);
         for (ExpOutputDataset dataset : datasets) {
-            System.out.println(dataset.getId());
+//            System.out.println(dataset.getId());
         }
     }
 
@@ -72,7 +72,7 @@ public class ExpOutputDatasetServiceTest {
     public void testReadAllInOneType() throws Exception {
         List<ExpOutputDataset> datasets = expOutputDatasetService.readAllInOneType("MetabolomicsData");
         for (ExpOutputDataset dataset : datasets) {
-            System.out.println(dataset.getAccession());
+//            System.out.println(dataset.getAccession());
         }
     }
 

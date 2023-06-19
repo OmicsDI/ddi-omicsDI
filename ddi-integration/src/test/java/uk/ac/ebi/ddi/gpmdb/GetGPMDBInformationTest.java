@@ -32,7 +32,5 @@ public class GetGPMDBInformationTest {
         models.add("GPM32320002708");
         models.add("GPM32320002697");
         List<String> proteins = instance.getUniqueProteinList(models);
-
-        System.out.println(proteins);
     }
 }

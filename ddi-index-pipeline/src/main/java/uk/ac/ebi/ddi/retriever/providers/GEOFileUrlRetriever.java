@@ -6,6 +6,7 @@ import uk.ac.ebi.ddi.extservices.net.FtpUtils;
 import uk.ac.ebi.ddi.extservices.net.UriUtils;
 import uk.ac.ebi.ddi.retriever.DatasetFileUrlRetriever;
 import uk.ac.ebi.ddi.retriever.IDatasetFileUrlRetriever;
+import uk.ac.ebi.ddi.service.db.model.dataset.Dataset;
 
 import java.io.IOException;
 import java.net.URI;
@@ -61,5 +62,10 @@ public class GEOFileUrlRetriever extends DatasetFileUrlRetriever {
 
     private boolean isDataset(String accession) {
         return accession.contains("GDS");
+    }
+
+    @Override
+    public Set<String> getDatasetFiles(Dataset dataset) throws IOException {
+        return getDatasetFiles(dataset.getAccession(),dataset.getDatabase());
     }
 }

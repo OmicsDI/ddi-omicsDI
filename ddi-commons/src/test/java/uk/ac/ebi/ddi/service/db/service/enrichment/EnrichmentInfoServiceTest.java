@@ -31,7 +31,6 @@ public class EnrichmentInfoServiceTest {
     public void testAddAndGetDataset() {
 
         Page<DatasetEnrichmentInfo> allEntries = enrichmentService.readAll(0, 1000000000);
-        System.out.println(allEntries.getSize());
 
 
         DatasetEnrichmentInfo dataset = new DatasetEnrichmentInfo("pxd000001", "PRIDE");
@@ -54,9 +53,8 @@ public class EnrichmentInfoServiceTest {
         Assert.assertEquals(dataset.getAccession(), dataset1.getAccession());
 
         allEntries = enrichmentService.readAll(0, 100);
-        System.out.println(allEntries.getSize());
         for (DatasetEnrichmentInfo datasettemp : allEntries) {
-            System.out.println(datasettemp.toString());
+            //System.out.println(datasettemp.toString());
         }
 
     }
@@ -71,7 +69,6 @@ public class EnrichmentInfoServiceTest {
     public void testRead() throws Exception {
 
         DatasetEnrichmentInfo enrichmentInfo = enrichmentService.readByAccession("PXD002287", "PRIDE");
-//        System.out.println(enrichmentInfo.getTitle());
 
     }
 

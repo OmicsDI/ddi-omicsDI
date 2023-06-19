@@ -21,13 +21,11 @@ public class ModelGPMDBClientTest {
     @Test
     public void testGetAllProteins() throws Exception {
         String[] proteins = client.getAllProteins("GPM10100159682");
-        System.out.println(proteins);
 
     }
 
     @Test
     public void testGeModelInformation() throws Exception {
         Model model = client.getModelInformation("GPM32320014494");
-        System.out.println(model.toString());
     }
 }

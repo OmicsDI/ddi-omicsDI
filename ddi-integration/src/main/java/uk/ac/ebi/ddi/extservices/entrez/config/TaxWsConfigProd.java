@@ -14,7 +14,7 @@ public class TaxWsConfigProd {
     }
 
     public TaxWsConfigProd() {
-        this("http", "eutils.ncbi.nlm.nih.gov");
+        this("https", "eutils.ncbi.nlm.nih.gov");
     }
 
     public String getHostName() {

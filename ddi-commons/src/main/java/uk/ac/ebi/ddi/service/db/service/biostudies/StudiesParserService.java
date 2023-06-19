@@ -59,10 +59,8 @@ public class StudiesParserService implements IBioStudiesParserService{
             JsonToken jsonToken = jsonParser.nextToken();
 
             while (jsonToken != JsonToken.END_OBJECT) {
-                System.out.println(jsonParser.getCurrentName());
                 if (jsonToken == JsonToken.FIELD_NAME && SUBMISSIONS.equals(jsonParser.getCurrentName())) {
 
-                    System.out.println("\nYour are in submissions ");
 
                     jsonToken = jsonParser.nextToken();
 
@@ -82,7 +80,6 @@ public class StudiesParserService implements IBioStudiesParserService{
                                 String accession = dataset.getAdditional()
                                         .get(DSField.Additional.ADDITIONAL_ACCESSION.key())
                                         .iterator().next();
-                                System.out.println("updating secondary accession of " + accession);
                                 List<Dataset> datasetList = datasetService.findByAccession(accession);
                                 if (datasetList.size() > 0) {
                                     Dataset dataset1 =  datasetList.get(0);
@@ -94,13 +91,10 @@ public class StudiesParserService implements IBioStudiesParserService{
                                 } else {
                                     datasetService.save(dataset);
                                 }
-                                System.out.println("secondary accession is " + accession);
                             }
                             submissions.toString();
-                            System.out.println("accession number is " + submissions.getAccno());
                         }
                         submissionsList.add(submissions);
-                        System.out.println("list count is " + submissionsList.size());
                         jsonToken = jsonParser.nextToken();
                     }
                 }

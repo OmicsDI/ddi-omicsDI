@@ -2,6 +2,7 @@ package uk.ac.ebi.ddi.annotation.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 import uk.ac.ebi.ddi.ddidomaindb.dataset.DSField;
 import uk.ac.ebi.ddi.service.db.model.dataset.Dataset;
 import uk.ac.ebi.ddi.service.db.utils.DatasetCategory;
@@ -179,12 +180,21 @@ public class DatasetUtils {
                 databases.add(databaseName);
                 additionals.put(DSField.Additional.REPOSITORY.getName(), databases);
             }
+            List<String> datasetFiles = dataset.getAdditionalFieldValues(DSField.Additional.DATASET_FILE.key());
+
         } catch (Exception ex) {
             LOGGER.error("Exception occured in transformEntryDataset entry with id " + dataset.getId());
         }
-        return new Dataset(dataset.getId(), databaseName,
+        Map<String,Set<String>> datasetFilesMap = new HashMap<String,Set<String>>();
+        Dataset newDataset = new Dataset(dataset.getId(), databaseName,
                 dataset.getName() != null ? dataset.getName().getValue() : "",
                 dataset.getDescription(), dates, additionals, crossReferences, DatasetCategory.INSERTED);
+        if(!CollectionUtils.isEmpty(dataset.getAdditionalFieldValues(DSField.Additional.DATASET_FILE.key())) && dataset.getAdditionalFieldValues(DSField.Additional.DATASET_FILE.key()).size() > 0){
+            List<String> datasetFiles = dataset.getAdditionalFieldValues(DSField.Additional.DATASET_FILE.key());
+            datasetFilesMap.put(dataset.getId(),new HashSet<String>(datasetFiles));
+            newDataset.setFiles(datasetFilesMap);
+        }
+        return newDataset;
 
     }
 
