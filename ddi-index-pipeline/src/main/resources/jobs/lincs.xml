@@ -127,7 +127,7 @@
         <batch:step id="copyIFiletoProd" parent="parentStep">
             <batch:tasklet>
                 <bean:bean id="copyIFileToDirectoryTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CopyFilesWithPatternFromSourceTasklet">
-                    <bean:property name="inputDirectory"      value="file:${ddi.common.preprod.directory}/${ddi.common.jpost.database.index}"/>
+                    <bean:property name="inputDirectory"      value="file:${ddi.common.preprod.directory}/${ddi.common.lincs.database.index}"/>
                     <bean:property name="outputDirectory" value="file:${ddi.common.prod.directory}/${ddi.common.lincs.database.index}"/>
                     <bean:property name="pattern" value="${ddi.common.original.pattern}" />
                 </bean:bean>
