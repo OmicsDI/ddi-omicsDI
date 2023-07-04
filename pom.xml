@@ -23,8 +23,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.data.mongo.version>3.0.3.RELEASE</spring.data.mongo.version>
         <spring.version>6.0.8</spring.version>
-        <junit.version>4.10</junit.version>
-        <commons-net.version>3.5</commons-net.version>
+        <junit.version>4.12</junit.version>
+        <commons-net.version>3.6</commons-net.version>
         <mockito.version>1.9.5</mockito.version>
         <woodstox.version>4.4.1</woodstox.version>
         <fastutil.version>6.5.1</fastutil.version>
