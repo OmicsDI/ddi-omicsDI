@@ -1,6 +1,7 @@
 package uk.ac.ebi.ddi.dbgap;
 
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,6 @@ public class DbgapServiceTest {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource(resourceName).getFile());
         dbgapService.saveEntries(file.getAbsolutePath());
+        Assert.assertNotNull(file.getAbsolutePath());
     }
 }
