@@ -11,7 +11,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import uk.ac.ebi.ddi.dbgap.DbgapService;
 import uk.ac.ebi.ddi.pipeline.indexer.tasklet.AbstractTasklet;
-import uk.ac.ebi.ddi.pipeline.indexer.tasklet.biostudies.ImportBioStudiesTasklet;
 
 import java.io.File;
 import java.util.*;
