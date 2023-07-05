@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GaPExchange xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./dbGaPEx2.1.5.xsd">
+
+<MetaVariables>
+	<Submitter/>
+	<Method/>
+</MetaVariables>
+<MetaLinks/>
+
+<Projects>
+	<Project/>
+</Projects>
+
+<Studies>
+
+<Study source="dbGaP" accession="phs001826.v1.p1" parentStudy="phs001826.v1.p1" createDate="2019-05-10" modDate="2019-06-06">
+
+<Configuration>
+	<Data_Provider><![CDATA[
+		<table border="1">
+		<tr><th>Title</th><th>Name</th><th>Institute</th></tr>
+		<tr><td>Principal Investigator</td><td>Srijan Sen, MD, PhD</td><td>University of Michigan, Ann Arbor, MI, USA</td></tr>
+		<tr><td>Funding Source</td><td>R01 MH101459-06</td><td>National Institutes of Health, Bethesda, MD, USA</td></tr>
+		</table>
+	]]></Data_Provider>
+	<StudyNameEntrez>Intern Health Study (IHS)</StudyNameEntrez>
+	<StudyNameReportPage>Mobile Technology to Identify Mechanisms Linking Genetic Variation and Depression in Intern Health Study (IHS)</StudyNameReportPage>
+	<StudyTypes>
+		<StudyType>Longitudinal Cohort</StudyType>
+	</StudyTypes>
+	<Description><![CDATA[
+<p>The Intern Health Study is an NIH-funded longitudinal cohort study that assesses stress and mood in medical interns at institutions around the US, enrolling over 3000 new interns each year. We are hopeful that data collected in this study will further understanding of the psychological, genetic, and program factors involved in the development of depression under stress, and make a real change in the residency experience.</p>]]>
+	</Description>
+	<StudyInEx><![CDATA[
+<p>Inclusion criteria:</p> <ol> <li>First year medical interns in US</li> </ol>]]>
+	</StudyInEx>
+	<StudyProjects>
+		<Project/>
+	</StudyProjects>
+	<Publications>
+		<Publication>
+			<Journal authors="Yu Fang, Laura Scott, Peter Song, Margit Burmeister, Srijan Sen" title="Genomic Prediction of Depression Risk and Resilience Under Stress" journal="bioRxiv. 2019."/>
+		</Publication>
+		<Publication>
+			<Pubmed pmid="29542006"/>
+		</Publication>
+		<Publication>
+			<Pubmed pmid="20368500"/>
+		</Publication>
+	</Publications>
+	<Diseases>
+		<Disease vocab_source="MESH" vocab_term="Depression"/>
+		<Disease vocab_source="MESH" vocab_term="Anxiety"/>
+	</Diseases>
+	<Attributions>
+		<Header title="Principal Investigator">
+			<AttName>Srijan Sen, MD, PhD</AttName>
+			<Institution>University of Michigan, Ann Arbor, MI, USA</Institution>
+		</Header>
+		<Header title="Funding Source">
+			<AttName>R01 MH101459-06</AttName>
+			<Institution>National Institutes of Health, Bethesda, MD, USA</Institution>
+		</Header>
+	</Attributions>
+	<DisplayPublicSummary>yes</DisplayPublicSummary>
+	<StudyURLs>
+		<Url name="Intern Health Study - The Sen Lab" url="https://www.srijan-sen-lab.com/intern-health-study"/>
+		<Url name="Intern Health Study" url="https://www.internhealthstudy.org/"/>
+	</StudyURLs>
+	<StudyHistory><![CDATA[
+<p><ol> <li>April 2007 - first cohort, implementation of patient health questionnaire (PHQ), start of saliva sample collection for genetic data</li> <li>April 2014 - introduction of mobile device (Fitbit) data collection</li> </ol></p>]]>
+	</StudyHistory>
+	<ConsentGroups>
+		<ConsentGroup groupNum="1" shortName="HMB-IRB-NPU" longName="Health/Medical/Biomedical (IRB, NPU)"/>
+	</ConsentGroups>
+</Configuration>
+
+  <Documents>
+    <Document phd="phd007940.1" type="questionnaire" createDate="2019-06-06" modDate="2019-06-06" urlToXml="http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/GetDocumentXml.cgi?document_id=phd007940.1" urlToHtml="http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/document.cgi?study_id=phs001826.v1.p1&amp;phd=7940">
+      <OrigName>GAD7.pdf</OrigName>
+      <DisplayName>GAD-7</DisplayName>
+      <Description>GAD-7</Description>
+      <displayStatus>public</displayStatus>
+      <xmlStatus>public</xmlStatus>
+    </Document>
+    <Document phd="phd007941.1" type="questionnaire" createDate="2019-06-06" modDate="2019-06-06" urlToXml="http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/GetDocumentXml.cgi?document_id=phd007941.1" urlToHtml="http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/document.cgi?study_id=phs001826.v1.p1&amp;phd=7941">
+      <OrigName>PHQ9.pdf</OrigName>
+      <DisplayName>PATIENT HEALTH QUESTIONNAIRE-9 (PHQ-9)</DisplayName>
+      <Description>PATIENT HEALTH QUESTIONNAIRE-9 (PHQ-9)</Description>
+      <displayStatus>public</displayStatus>
+      <xmlStatus>public</xmlStatus>
+    </Document>
+  </Documents>
+
+  <Annotations>
+    <DocumentPart phd="phd007940.1" sectionId="phd007940">
+      <phvList>
+        <phvRef variableId="409023"/>
+        <phvRef variableId="409024"/>
+        <phvRef variableId="409025"/>
+        <phvRef variableId="409026"/>
+        <phvRef variableId="409027"/>
+      </phvList>
+    </DocumentPart>
+    <DocumentPart phd="phd007941.1" sectionId="phd007941">
+      <phvList>
+        <phvRef variableId="409018"/>
+        <phvRef variableId="409019"/>
+        <phvRef variableId="409020"/>
+        <phvRef variableId="409021"/>
+        <phvRef variableId="409022"/>
+      </phvList>
+    </DocumentPart>
+  </Annotations>
+
+
+
+</Study>
+
+</Studies>
+
+</GaPExchange>
