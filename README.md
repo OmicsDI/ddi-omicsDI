@@ -29,7 +29,7 @@ High level task listed as below.
 5) Adding list of dataset files if any to each entry
 6) Generating data from repository(MongoDB in our case)
 
-![img.png](flowchart.png)
+![Indexing pipeline](flowchart.png)
 
 ## OmicsDI Web Services
 Webservice component exposes many RESTEndpoint related to datasets and database.
