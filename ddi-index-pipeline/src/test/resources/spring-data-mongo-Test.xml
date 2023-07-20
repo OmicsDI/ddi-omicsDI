@@ -27,7 +27,7 @@
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="simpleMongoDbFactoryID" />
 	</bean>-->
-	<mongo:db-factory client-uri="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" id="simpleMongoDbFactoryID"/>
+	<mongo:db-factory client-uri="mongodb://ddi_user:A2OzOIXaKJU@mongodb-hxvm-122.ebi.ac.uk:27017,mongodb-hlvm-022.ebi.ac.uk:27017/ddi_db?authSource=admin&amp;replicaSet=omicsdidevrs065&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" id="simpleMongoDbFactoryID"/>
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="simpleMongoDbFactoryID" />
 		<constructor-arg ref="mongoConverter" />

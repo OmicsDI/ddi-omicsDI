@@ -93,6 +93,11 @@ public class DSField {
         public static final Field REANALYSIS_COUNT_SCALED = new Field("reanalysis_count_scaled", UNKNOWN, ADDITIONAL, "Reanalysis Count Scaled");
         public static final Field IS_PRIVATE = new Field("isPrivate", UNKNOWN, ADDITIONAL, "IsPrivate");
         public static final Field SEARCH_DOMAIN = new Field("search_domains", UNKNOWN, ADDITIONAL, "Search Domains");
+        public static final Field TITLE = new Field("title", UNKNOWN, ADDITIONAL, "Title");
+        public static final Field SUMMARY = new Field("summary", UNKNOWN, ADDITIONAL, "Summary");
+        public static final Field PDAT = new Field("PDAT", UNKNOWN, ADDITIONAL, "PDAT");
+        public static final Field PMID = new Field("PDAT", UNKNOWN, ADDITIONAL, "PDAT");
+
     }
 
     public static class Configurations {

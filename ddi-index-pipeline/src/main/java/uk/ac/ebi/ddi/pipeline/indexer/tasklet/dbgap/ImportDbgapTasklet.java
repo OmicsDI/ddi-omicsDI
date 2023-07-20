@@ -2,6 +2,7 @@ package uk.ac.ebi.ddi.pipeline.indexer.tasklet.dbgap;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
@@ -13,6 +14,7 @@ import uk.ac.ebi.ddi.dbgap.DbgapService;
 import uk.ac.ebi.ddi.pipeline.indexer.tasklet.AbstractTasklet;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.*;
 
 @Getter
@@ -23,18 +25,21 @@ public class ImportDbgapTasklet extends AbstractTasklet {
     Resource inputDirectory;
     DbgapService dbgapService;
 
+    String pattern;
+
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         LOGGER.info("DataSet import, inputDirectory: {} ", inputDirectory.getURI());
-        File[] files = inputDirectory.getFile().listFiles();
+        FileFilter fileFilter = new WildcardFileFilter(pattern);
+        File[] files = inputDirectory.getFile().listFiles(fileFilter);
         if (files == null) {
             LOGGER.warn("Input directory is empty, {}", inputDirectory.getFile().getAbsolutePath());
             return RepeatStatus.FINISHED;
         }
         Collections.synchronizedList(Arrays.asList(files)).parallelStream().forEach(file -> {
             try {
-                LOGGER.info("processing file:{}",file);
-                dbgapService.saveEntries(file.getPath());
+                    LOGGER.info("processing file:{}",file);
+                    dbgapService.saveEntries(file.getPath());
             } catch (Exception e) {
                 LOGGER.error("Error Reading file : {}, ", file.getAbsolutePath(), e);
             }
