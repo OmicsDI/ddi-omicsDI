@@ -37,7 +37,6 @@ public class DDIPublicationAnnotationServiceTest {
                 " The method relies on a genetically-targetable peroxidase enzyme" +
                 " that biotinylates nearby proteins, which are subsequently" +
                 " purified and identified by MS.  doi: 10.1127/science.1230593. We used this approach to" +
-                " doi: https://doi.org/10.1084/jem.20220017" +
                 " identify 495 proteins within the human mitochondrial matrix," +
                 " including 31 not previously linked to mitochondria. The labeling" +
                 " was exceptionally specific and distinguished between inner membrane proteins facing the matrix" +

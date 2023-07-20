@@ -96,7 +96,6 @@ public class DSField {
         public static final Field TITLE = new Field("title", UNKNOWN, ADDITIONAL, "Title");
         public static final Field SUMMARY = new Field("summary", UNKNOWN, ADDITIONAL, "Summary");
         public static final Field PDAT = new Field("PDAT", UNKNOWN, ADDITIONAL, "PDAT");
-        public static final Field PMID = new Field("PDAT", UNKNOWN, ADDITIONAL, "PDAT");
 
     }
 

@@ -1,11 +1,9 @@
 package uk.ac.ebi.ddi.geo.model;
 
 import jakarta.xml.bind.annotation.*;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 @XmlType(name = "DocSum")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DocSum {
