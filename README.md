@@ -29,15 +29,15 @@ High level task listed as below.
 5) Adding list of dataset files if any to each entry
 6) Generating data from repository(MongoDB in our case)
 
-![Indexing pipeline](flowchart.png)
+![Indexing pipeline](https://github.com/OmicsDI/ddi-omicsDI/blob/OMICSDI-1AND55/flowchart.png)
 
 ## OmicsDI Web Services
 Webservice component exposes many RESTEndpoint related to datasets and database.
 Scientific communities using REST endpoint to fetch the Multiomics data for their study and feeding it collaborators for further research.
 
 ## Artifacts
-1) indexing-pipeline : ddi-index-pipeline-<version>>.jar
-2) webservice : ddi-web-<version>.war
+1) indexing-pipeline : ddi-index-pipeline-version.jar
+2) webservice : ddi-web-version.war
 
 ## Contact and Support
 If you have any problems, suggestions or comments for our services please contact us via [Contact us](https://www.ebi.ac.uk/about/contact/support/index.php?query=omics-di)
