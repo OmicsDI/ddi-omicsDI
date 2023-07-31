@@ -1,5 +1,6 @@
 package uk.ac.ebi.ddi.annotation.service.publication;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import uk.ac.ebi.ddi.annotation.utils.DOIUtils;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.publication.PublicationWsClient;

@@ -28,27 +28,28 @@
             <batch:tasklet>
                 <bean:bean id="DataImportTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.dbgap.ImportDbgapTasklet">
                     <bean:property name="inputDirectory"  value="file:${ddi.common.dbgap.source.directory}"/>
+                    <bean:property name="pattern"  value="${ddi.common.dbgap.pattern}"/>
                     <bean:property name="dbgapService"  ref="dbgapService" />
                 </bean:bean>
             </batch:tasklet>
         </batch:step>
-        <batch:step id="annotationLink" parent="parentStep" next="annotationFiles">
+        <!--<batch:step id="annotationLink" parent="parentStep" next="enrichmentStep">
             <batch:tasklet>
                 <bean:bean id="annotationLinkTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.annotation.AnnotateDatasetLinkTaskLet">
                     <bean:property name="databaseName" value="${ddi.common.dbgap.database.name}"/>
                     <bean:property name="datasetAnnotationService" ref="datasetAnnotationService" />
                 </bean:bean>
             </batch:tasklet>
-        </batch:step>
+        </batch:step>-->
 
-        <batch:step id="annotationFiles" parent="parentStep" next="enrichmentStep">
+        <!--<batch:step id="annotationFiles" parent="parentStep" next="enrichmentStep">
             <batch:tasklet>
                 <bean:bean id="annotationTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.annotation.AnnotationXMLTasklet">
                     <bean:property name="databaseName" value="${ddi.common.dbgap.database.name}"/>
                     <bean:property name="datasetAnnotationService" ref="datasetAnnotationService" />
                 </bean:bean>
             </batch:tasklet>
-        </batch:step>
+        </batch:step>-->
 
         <batch:step id="enrichmentStep" parent="parentStep" next="datasetFileRetrieve">
             <batch:tasklet>

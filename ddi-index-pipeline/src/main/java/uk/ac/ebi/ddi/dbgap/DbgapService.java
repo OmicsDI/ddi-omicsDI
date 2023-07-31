@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import uk.ac.ebi.ddi.annotation.service.publication.DDIPublicationAnnotationService;
 import uk.ac.ebi.ddi.ddidomaindb.dataset.DSField;
 import uk.ac.ebi.ddi.service.db.model.dataset.Dataset;
 import uk.ac.ebi.ddi.service.db.service.dataset.DatasetService;
@@ -26,6 +27,8 @@ public class DbgapService {
 
     @Autowired
     DatasetService datasetService;
+
+    DDIPublicationAnnotationService ddiPublicationAnnotationService = DDIPublicationAnnotationService.getInstance();
 
     public void saveEntries(String filePath) throws IOException {
         File initialFile = new File(filePath);
@@ -81,7 +84,14 @@ public class DbgapService {
             if (nameSynonyms != null) {
                 dataset.addAdditional(DSField.Additional.ENRICH_TITLE.getName(), new HashSet<>(Arrays.asList(nameSynonyms.html())));
             }
-            dataset.setDescription(getFirstElementText(configuration, "description"));
+            String description = getFirstElementText(configuration, "description");
+            dataset.setDescription(description);
+            //description might contains DOI
+            List<String> dois = ddiPublicationAnnotationService.getDOIListFromText(Arrays.asList(description));
+            if(!CollectionUtils.isEmpty(dois)){
+                dataset.addCrossReferences("DOI",new HashSet<>(dois));
+            }
+
             dataset.addAdditional("study_inc_exc", new HashSet<>(Arrays.asList(getFirstElementText(configuration, "StudyInEx"))));
             dataset.addAdditional("study_history", new HashSet<>(Arrays.asList(getFirstElementText(configuration, "StudyHistory"))));
             addStudyTypes(getFirstElementByTagName(configuration, "StudyTypes"),dataset);
