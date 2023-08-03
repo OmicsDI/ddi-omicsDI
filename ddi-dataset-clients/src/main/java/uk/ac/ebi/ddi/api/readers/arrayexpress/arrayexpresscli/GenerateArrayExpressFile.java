@@ -231,7 +231,8 @@ public class GenerateArrayExpressFile {
         HashSet<String> repositories = new HashSet<>();
         repositories.add("ArrayExpress");
 
-        ex.getSecondaryaccession().forEach(accession -> {
+        //TODO : We need to remove this code after biostudies integration
+        /*ex.getSecondaryaccession().forEach(accession -> {
             if (accession != null && !accession.isEmpty()) {
                 String str = accession.substring(0, 3);
                 switch (str) {
@@ -251,7 +252,7 @@ public class GenerateArrayExpressFile {
                 }
                 entry.addAdditionalField(DSField.Additional.SECONDARY_ACCESSION.getName(), accession);
             }
-        });
+        });*/
 
         for (String repository : repositories) {
             entry.addAdditionalField(DSField.Additional.REPOSITORY.getName(), repository);
