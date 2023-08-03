@@ -82,6 +82,7 @@ public class GeoService {
 
     private void processDocSumEntry(DocSum docSum){
         Dataset dataset = new Dataset();
+        omicsType.add("Unknown");
         docSum.getItem().stream().forEach(
               item ->   {
                   dataset.setDatabase("GEO");
