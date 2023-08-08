@@ -52,7 +52,7 @@ public class DbgapService {
 
     private void saveStudy(Element study) {
         Dataset dataset = new Dataset();
-
+        omicsType.add("Genomic");
         String acc = study.attr(DSField.ACCESSION.getName());
         acc = acc.substring(0, acc.indexOf('.'));
 
