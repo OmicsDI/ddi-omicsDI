@@ -57,7 +57,7 @@ public class Constants {
             " in the case of tandem mass spectrometry data, " +
             "re-processed using our in-house standardized spectral counting pipeline. ";
 
-    public static final String PAXDB = "PaxDB";
+    public static final String PAXDB = "PAXDB";
     public static final String PAXDB_RELEASE_DATE = "12/03/2015";
     public static final String PAXDB_DATA_PROTOCOL = "For the rescaling, the\n" +
             "datasets are first parsed or processed such that the data reflect\n" +

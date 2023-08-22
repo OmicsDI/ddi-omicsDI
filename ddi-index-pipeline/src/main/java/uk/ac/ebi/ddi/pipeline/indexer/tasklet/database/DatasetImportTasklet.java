@@ -71,7 +71,7 @@ public class DatasetImportTasklet extends AbstractTasklet {
 
                 List<Entry> entries = omicsXMLFile.getAllEntries();
                 for (Entry dataEntry : entries) {
-                    String db = omicsXMLFile.getDatabaseName() != null ? omicsXMLFile.getDatabaseName() : "NA";
+                    String db = databaseName != null ? databaseName : omicsXMLFile.getDatabaseName() != null ? omicsXMLFile.getDatabaseName() : "NA";
                     if ("".equals(db)) {
                         db = dataEntry.getRepository() != null ? dataEntry.getRepository() : "";
                     }
