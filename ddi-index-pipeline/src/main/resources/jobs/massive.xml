@@ -179,7 +179,7 @@
         <batch:step id="moveGNPSToProductionStep" parent="parentStep">
             <batch:tasklet>
                 <bean:bean id="generateGNPSFromSourceTasklet"      scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.database.DatasetExportTasklet">
-                    <bean:property name="databaseName"             value="${ddi.common.massive.database.name}" />
+                    <bean:property name="databaseName"             value="${ddi.common.gnps.database.name}" />
                     <bean:property name="outputDirectory"          value="file:${ddi.common.prod.directory}/${ddi.common.gnps.database.index}"/>
                     <bean:property name="filePrefix"               value="${ddi.common.gnps.prefix}" />
                     <bean:property name="numberEntries"            value="${ddi.common.multiple.file.number.entries}" />
