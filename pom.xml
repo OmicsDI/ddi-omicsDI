@@ -207,4 +207,32 @@
             <version>3.12.13</version>
         </dependency>-->
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseProfiles>skipTestsForReleasePerform</releaseProfiles>
+                    <goals>install</goals>
+                    <arguments>-Dmaven.javadoc.skip=true</arguments>
+                    <tagBase>https://github.com/OmicsDI/ddi-omicsDI/-/tags</tagBase>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>skipTestsForReleasePerform</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+    </profiles>
+    <scm>
+        <connection>scm:git:ssh://git@github.com/OmicsDI/ddi-omicsDI.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/OmicsDI/ddi-omicsDI.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 </project>

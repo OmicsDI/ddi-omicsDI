@@ -14,8 +14,8 @@
     <!-- Maven information an autowired classes -->
 
     <mongo:repositories base-package="uk.ac.ebi.ddi.service.db.repo" />
-    <context:component-scan base-package="uk.ac.ebi.ddi.service.db.service"/>
-    <context:property-placeholder location="classpath*:prop/common.properties" />
+    <context:component-scan base-package="uk.ac.ebi.ddi.service.db.service,uk.ac.ebi.ddi.pipeline.indexer.pipeline.listener"/>
+    <context:property-placeholder location="classpath*:common.properties" />
 
     <mongo:db-factory client-uri="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000" id="mongoDbFactory"/>
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
