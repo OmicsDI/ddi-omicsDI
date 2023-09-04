@@ -27,7 +27,6 @@
         <spring.boot.version>3.0.4</spring.boot.version>
         <plugin.shade.version>3.2.3</plugin.shade.version>
         <start-class>uk.ac.ebi.ddi.OmicsIndexerPipelineApplication</start-class>
-        <!--<start-class>org.springframework.batch.core.launch.support.CommandLineJobRunner</start-class>-->
     </properties>
     <dependencies>
         <dependency>
@@ -167,30 +166,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-       <!-- <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework.batch</groupId>
-            <artifactId>spring-batch-core</artifactId>
-            <version>5.0.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
         <dependency>
             <groupId>io.spring.platform</groupId>
             <artifactId>platform-bom</artifactId>
@@ -248,16 +223,6 @@
             <artifactId>commons-configuration</artifactId>
             <version>1.6</version>
         </dependency>
-        <!--<dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>org.springframework.batch</groupId>
             <artifactId>spring-batch-test</artifactId>
