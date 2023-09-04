@@ -42,7 +42,7 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
 
     private List<String> processed = new ArrayList<>();
 
-    private static final int PARALLEL = Math.min(9, Runtime.getRuntime().availableProcessors());
+    private static final int PARALLEL = Math.min(8, Runtime.getRuntime().availableProcessors());
 
     private boolean overwrite;
 
