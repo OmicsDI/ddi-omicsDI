@@ -27,18 +27,13 @@ public class MassIVEFileUrlRetriever extends DatasetFileUrlRetriever {
         Set<String> result = new HashSet<>();
         String url = String.format("%s/%s", FTP_MASSIVE, accession);
         URI uri = UriUtils.toUri(url);
-        System.out.println("FTP Massive" +database+ " url for "+accession + " is "+uri.getPath());
         FTPClient ftpClient = createFtpClient();
         try {
-            System.out.println("Before connection");
             ftpClient.connect(uri.getHost());
-            System.out.println("After connection");
             ftpClient.login("anonymous", "anonymous");
-            System.out.println("After login");
             FtpUtils.getListFiles(ftpClient, uri.getPath()).stream()
                     .map(x -> String.format("ftp://%s%s", uri.getHost(), x))
                     .forEach(result::add);
-            System.out.println("After FtpUtils.getListFiles");
         } finally {
             if (ftpClient.isConnected()) {
                 ftpClient.disconnect();

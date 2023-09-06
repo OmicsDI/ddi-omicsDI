@@ -3,7 +3,7 @@ package uk.ac.ebi.ddi.pipeline.indexer.pipeline.listener;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.listener.StepExecutionListenerSupport;
+import org.springframework.batch.core.StepExecutionListener;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author Yasset Perez-Riverol (ypriverol@gmail.com)
  * @date 29/09/15
  */
-public class ExecutionContextThrowablePromotionListener extends StepExecutionListenerSupport {
+public class ExecutionContextThrowablePromotionListener implements StepExecutionListener {
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {

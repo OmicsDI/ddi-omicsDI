@@ -42,7 +42,7 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
 
     private List<String> processed = new ArrayList<>();
 
-    private static final int PARALLEL = Math.min(9, Runtime.getRuntime().availableProcessors());
+    private static final int PARALLEL = Math.min(8, Runtime.getRuntime().availableProcessors());
 
     private boolean overwrite;
 
@@ -64,38 +64,6 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
         retrieverMap.put("MetaboLights" , new MetabolightsFileUrlRetriever(retriever));
         retrieverMap.put("MetabolomicsWorkbench" , new MetabolomicsWorkbenchFileUrlRetriever(retriever));
         retrieverMap.put("ENA" , new ENAFileUrlRetriever(retriever));
-
-
-        // Initializing retrievers
-        /*if(databaseName.equalsIgnoreCase("ArrayExpress")){
-            retriever = new ArrayExpressFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("GEO")){
-            retriever = new GEOFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("BioModels")){
-            retriever = new BioModelsFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("ExpressionAtlas")){
-            retriever = new ExpressionAtlasFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("dbGaP")){
-            retriever = new DbGapFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("GNPS")){
-            retriever = new GNPSFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("JPOST Repository")){
-            retriever = new JPostFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("MassIVE")){
-            retriever = new MassIVEFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("LINCS")){
-            retriever = new LincsFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("PeptideAtlas")){
-            retriever = new PeptideAtlasFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("EVA")){
-            retriever = new EVAFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("MetaboLights")){
-            retriever = new MetabolightsFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("MetabolomicsWorkbench")){
-            retriever = new MetabolomicsWorkbenchFileUrlRetriever(retriever);
-        } else if (databaseName.equalsIgnoreCase("ENA")){
-            retriever = new ENAFileUrlRetriever(retriever);
-        }*/
     }
 
     private DatabaseDetail getDatabase(String accession) {
