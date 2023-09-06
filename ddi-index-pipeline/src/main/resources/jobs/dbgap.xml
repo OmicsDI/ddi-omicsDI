@@ -172,6 +172,8 @@
         </bean:property>
         <bean:property name="strict" value="false"/>
     </bean:bean>
+    <!--listener promotes throwables from step level to job level-->
+    <bean:bean id="throwablePromotionListener" class="uk.ac.ebi.ddi.pipeline.indexer.pipeline.listener.ExecutionContextThrowablePromotionListener"/>
 
     <bean:bean id="annotationService" class="uk.ac.ebi.ddi.annotation.service.synonyms.DDIAnnotationService"/>
     <bean:bean id="similarityCount" class="uk.ac.ebi.ddi.similarityCalculator.SimilarityCounts"/>
@@ -179,7 +181,7 @@
     <!--load property files-->
     <bean id="placeholderProperties"
     class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-    <property name="location" value="classpath:prop/common.properties" />
+    <property name="location" value="classpath:common.properties" />
 
     <property name="ignoreUnresolvablePlaceholders" value="true" />
     <property name="order" value="1" />

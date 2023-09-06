@@ -15,9 +15,9 @@
 
     <description>This job is to annotated multiomics datasets</description>
 
-    <import resource="../context/common-context.xml"/>
-    <import resource="../context/db-job-repository.xml"/>
-    <import resource="../context/mongo-db-context.xml" />
+    <import resource="classpath*:context/common-context.xml"/>
+    <import resource="classpath*:context/db-job-repository.xml"/>
+    <import resource="classpath*:context/mongo-db-context.xml" />
 
     <batch:job id="ddiPrivateDatasetJob" xmlns="http://www.springframework.org/schema/batch">
 
@@ -57,7 +57,7 @@
     <!--load property files-->
     <bean id="placeholderProperties"
     class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-    <property name="location" value="classpath:prop/common.properties" />
+    <property name="location" value="classpath:common.properties" />
 
     <property name="ignoreUnresolvablePlaceholders" value="true" />
     <property name="order" value="1" />
