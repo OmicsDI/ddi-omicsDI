@@ -1,3 +1,11 @@
 /.idea/
 /.m2/
 /*/target/
+/ddi-commons/ddi-commons.iml
+/ddi-ebi-logs/ddi-ebi-logs.iml
+/ddi-dataset-clients/ddi-dataset-clients.iml
+/ddi-integration/ddi-integration.iml
+/ddi-index-pipeline/ddi-index-pipeline.iml
+/ddi-omicsDI.iml
+/ddi-web/ddi-web.iml
+.DS_Store

@@ -167,7 +167,7 @@
         </batch:step>
     </batch:job>
 
-    <batch:job id="generatetionJob" xmlns="http://www.springframework.org/schema/batch">
+    <batch:job id="generationJob" xmlns="http://www.springframework.org/schema/batch">
 
         <batch:step id="cleanGPreProdStepJob" next="moveToProductionStepJob" parent="parentStep">
             <batch:tasklet>
