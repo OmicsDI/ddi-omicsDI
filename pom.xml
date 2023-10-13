@@ -5,7 +5,7 @@
     <groupId>uk.ac.ebi.ddi</groupId>
     <artifactId>ddi-omicsDI</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <modules>
         <module>ddi-index-pipeline</module>
         <module>ddi-commons</module>
@@ -231,6 +231,6 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/OmicsDI/ddi-omicsDI.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/OmicsDI/ddi-omicsDI.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>ddi-omicsDI-1.1</tag>
     </scm>
 </project>
