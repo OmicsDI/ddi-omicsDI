@@ -87,7 +87,7 @@
             <batch:listener ref="jobListener"/>
         </batch:listeners>
     </batch:job>
-    <batch:job id="ddiGenerationJob" xmlns="http://www.springframework.org/schema/batch">
+    <batch:job id="generationJob" xmlns="http://www.springframework.org/schema/batch">
         <batch:step id="cleanStep" parent="parentStep" next="writeIndexes">
             <batch:tasklet>
                 <bean:bean id="cleanGPreProdTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CleanDirectoryTasklet">
