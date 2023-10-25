@@ -67,8 +67,7 @@ public class ENAWsClient extends WsClient {
 
         for (ENAWsConfigProd.AccessionTypes accType : accType2Url.keySet()) {
             String url = accType2Url.get(accType);
-            System.out.println("Fetching "+url);
-            LOGGER.warn("Fetching {}", url);
+            LOGGER.info("Fetching {}", url);
             for (ENAProjectAccessionMapping pAcc : restTemplate.getForObject(url, ENAProjectAccessionMapping[].class)) {
                 String accessionInCache = accType == ENAWsConfigProd.AccessionTypes.sequence
                         ? pAcc.getAccession(accType).replace(ENAWsConfigProd.getLookupPostfix(accType), "")
