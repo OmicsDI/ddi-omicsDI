@@ -33,7 +33,7 @@ import uk.ac.ebi.ddi.service.db.service.logger.HttpEventService;
 
 @Configuration
 //@OpenAPIDefinition(servers = {@io.swagger.v3.oas.annotations.servers.Server(url = "${omicsdi.openapi.dev-url}", description = "Dev Server URL") , @io.swagger.v3.oas.annotations.servers.Server(url = "${omicsdi.openapi.prod-url}", description = "Prod Server URL")})
-@ComponentScan({"uk.ac.ebi.ddi.service.db.service","uk.ac.ebi.ddi.service.db.repo.facetsettings","uk.ac.ebi.ddi.service.db.repo.dataset"})
+@ComponentScan({"uk.ac.ebi.ddi.service.db.service","uk.ac.ebi.ddi.service.db.repo.facetsettings","uk.ac.ebi.ddi.service.db.repo.dataset","uk.ac.ebi.ddi.security.*"})
 @EnableMongoRepositories(basePackages = "uk.ac.ebi.ddi.service.db.repo")
 public class OpenAPIConfig {
 
