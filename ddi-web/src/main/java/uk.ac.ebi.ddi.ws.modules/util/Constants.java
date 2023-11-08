@@ -132,7 +132,7 @@ public class Constants {
             "involved", "control", "mean", "calculated", "parameters", "illumina", "reference",
             "3000", "http", "days", "under", "individual",
             "biological", "compared", "experiment", "transcription", "induced", "global",
-            "genome_build", "scanning", "test", "scanning", "scaning", "cell", "whole", "model", "performed",
+            "genome_build", "scanning", "test", "scanning", "scaning", "cell", "whole", "uk/ac/ebi/ddi/security/model", "performed",
             "more target", "factors", "hours",
             "hour", "mutant", "cells", "transcriptional", "regulated", "cancer", "function", "normal", "12"
 
