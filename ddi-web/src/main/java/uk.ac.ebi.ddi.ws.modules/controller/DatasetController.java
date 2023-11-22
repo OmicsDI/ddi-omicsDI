@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -349,7 +350,7 @@ public class DatasetController {
             produces = {APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK) // 200
     @ResponseBody
-    public Map<String, Object> getDataset(
+    public ResponseEntity<?> getDataset(
              @Parameter(description = "Accession of the Dataset in the resource, e.g : PXD000210")
             @PathVariable(value = "accession") String accession,
              @Parameter(description = "Database accession id, e.g: pride")
@@ -358,8 +359,13 @@ public class DatasetController {
             @RequestHeader HttpHeaders httpHeaders,
             HttpServletRequest request) throws OmicsCustomException {
         Map<String, Object> result = new HashMap<>();
-        try {
+        MediaType contentType = MediaType.APPLICATION_JSON;
+          try {
             database = databaseDetailService.retriveAnchorName(database);
+            if(accession.contains(".json") || accession.contains(".xml")){
+                contentType = accession.contains(".json") ? MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
+                accession = accession.substring(0, accession.lastIndexOf("."));
+            }
             Dataset dataset = datasetService.read(accession, database);
             String ipAddress = request.getHeader("X-FORWARDED-FOR");
             ipAddress = ipAddress != null ? ipAddress : request.getHeader("X-Cluster-Client-IP");
@@ -380,6 +386,7 @@ public class DatasetController {
             String primaryAccession = getPreferableAccession(dataset.getFiles(), ipAddress, dataset.getAccession());
             List<GalaxyFileExtension> galaxyFileExtensions = fileGroupService.findAllGalaxyExtensions();
             galaxyFileExtensions.sort((x1, x2) -> x2.getExtension().length() - x1.getExtension().length());
+            MediaType finalContentType = contentType;
             List<Object> files = dataset.getFiles().keySet().stream().map(x -> {
                 Map<String, Object> providers = new HashMap<>();
                 Map<String, List<String>> fileGroups = new HashMap<>();
@@ -400,7 +407,10 @@ public class DatasetController {
                 });
                 providers.put("files", fileGroups);
                 providers.put("type", x.equals(primaryAccession) ? "primary" : "mirror");
-                return providers;
+                if(finalContentType != null)
+                    return  ResponseEntity.status(HttpStatus.OK).contentType(finalContentType).body(providers);
+                else
+                    return ResponseEntity.status(HttpStatus.OK).body(providers);
             }).collect(Collectors.toList());
             result.put("file_versions", files);
             if (debug) {
@@ -411,7 +421,11 @@ public class DatasetController {
             throw new OmicsCustomException("Either Accession or Database is not available, " +
                     "Please provide correct data.");
         }
-        return result;
+          if(contentType != null){
+              return  ResponseEntity.status(HttpStatus.OK).contentType(contentType).body(result);
+          } else {
+              return ResponseEntity.status(HttpStatus.OK).body(result);
+          }
     }
 
     private String getPreferableAccession(Map<String, Set<String>> files, String ipAddress, String defaultAccession) {

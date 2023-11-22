@@ -1,24 +1,16 @@
 package uk.ac.ebi.ddi.ws.modules.config;
 
-import java.net.UnknownHostException;
-import java.util.List;
-
-import com.mongodb.client.MongoClient;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import  io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.dataset.DatasetWsClient;
@@ -31,13 +23,13 @@ import uk.ac.ebi.ddi.ebe.ws.dao.config.EbeyeWsConfigProd;
 import uk.ac.ebi.ddi.service.db.service.logger.DatasetResourceService;
 import uk.ac.ebi.ddi.service.db.service.logger.HttpEventService;
 
+import java.util.List;
+
 @Configuration
-//@OpenAPIDefinition(servers = {@io.swagger.v3.oas.annotations.servers.Server(url = "${omicsdi.openapi.dev-url}", description = "Dev Server URL") , @io.swagger.v3.oas.annotations.servers.Server(url = "${omicsdi.openapi.prod-url}", description = "Prod Server URL")})
 @ComponentScan({"uk.ac.ebi.ddi.service.db.service","uk.ac.ebi.ddi.service.db.repo.facetsettings","uk.ac.ebi.ddi.service.db.repo.dataset","uk.ac.ebi.ddi.security.*"})
 @EnableMongoRepositories(basePackages = "uk.ac.ebi.ddi.service.db.repo")
 public class OpenAPIConfig {
-
-  @Value("${omicsdi.openapi.dev-url}")
+    @Value("${omicsdi.openapi.dev-url}")
   private String devUrl;
 
   @Value("${omicsdi.openapi.prod-url}")
@@ -86,7 +78,7 @@ public class OpenAPIConfig {
 
     Info info = new Info()
         .title("Data Discovery Index web service API")
-        .version("1.0")
+        .version("openapi: 3.0.0")
         .contact(contact)
         .description("Programmatic access to the Data Discovery Index data via RESTful Web Services.").termsOfService("https://www.ebi.ac.uk/about/terms-of-use")
         .license(mitLicense);
