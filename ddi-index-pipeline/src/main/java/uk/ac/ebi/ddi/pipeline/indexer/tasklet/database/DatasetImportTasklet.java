@@ -79,7 +79,7 @@ public class DatasetImportTasklet extends AbstractTasklet {
                         db = "ENA";
                         dataEntry.addAdditionalField(DSField.Additional.REPOSITORY.key(),"ENA");
                         dataEntry.addAdditionalField(DSField.Additional.OMICS.key(),"Genomics");
-                        dataEntry.addAdditionalField(DSField.Additional.LINK.key(),"https://www.ncbi.nlm.nih.gov/bioproject/?term=" + dataEntry.getId());
+                        dataEntry.addAdditionalField(DSField.Additional.LINK.key(),"https://www.ebi.ac.uk/ena/browser/view/" + dataEntry.getId());
                     }
                                long submitterCount = dataEntry.getAdditionalFields() != null ?
                             dataEntry.getAdditionalFields().getField().parallelStream().
