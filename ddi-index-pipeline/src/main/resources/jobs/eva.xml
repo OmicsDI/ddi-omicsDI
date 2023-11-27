@@ -27,7 +27,7 @@
         <batch:step id="copyFileFromResource" parent="parentStep" next="validateXMLStep">
             <batch:tasklet>
                 <bean:bean id="copyFileToDirectoryTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CopyFilesWithPatternFromSourceTasklet">
-                    <bean:property name="inputDirectory"      value="file:/nfs/nobackup/variation/omicsdi/"/>
+                    <bean:property name="inputDirectory"      value="file:${ddi.common.eva.source.directory}"/>
                     <bean:property name="outputDirectory" value="file:${ddi.common.original.directory}/${ddi.common.eva.database.index}"/>
                     <bean:property name="pattern" value="${ddi.common.original.pattern}" />
                 </bean:bean>
