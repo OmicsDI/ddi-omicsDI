@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:bean="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+		                   http://www.springframework.org/schema/batch
+                           http://www.springframework.org/schema/batch/spring-batch.xsd
+		                   http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+    <description>
+        This job import the XML for a ecrin-mdr-crc to be submitted to OmicsDI system.
+    </description>
+
+    <import resource="classpath*:context/common-context.xml"/>
+    <import resource="classpath*:context/db-job-repository.xml"/>
+    <import resource="classpath*:context/mongo-db-context.xml"/>
+
+    <batch:job id="ddiImportJob" xmlns="http://www.springframework.org/schema/batch">
+
+        <batch:step id="importDataStep" parent="parentStep" >
+            <batch:tasklet>
+                <bean:bean id="DataImportTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.ecrin.ImportEcrinTasklet">
+                    <bean:property name="databaseName" value="${ddi.common.ecrin.database.name}" />
+                    <bean:property name="inputDirectory"  value="file:${ddi.common.ecrin.source.directory}"/>
+                    <bean:property name="pattern"  value="${ddi.common.ecrin.pattern}"/>
+                    <bean:property name="ecrinService"  ref="ecrinService" />
+                    <bean:property name="datasetAnnotationService"  ref="datasetAnnotationService" />
+                    <bean:property name="databaseAnnotationService" ref="databaseAnnotationService" />
+                </bean:bean>
+            </batch:tasklet>
+        </batch:step>
+
+        <batch:listeners>
+            <batch:listener ref="jobListener"/>
+        </batch:listeners>
+    </batch:job>
+
+    <batch:step id="parentStep" abstract="true">
+        <batch:listeners>
+            <batch:listener ref="executionContextPromotionListener"/>
+            <batch:listener ref="throwablePromotionListener"/>
+        </batch:listeners>
+    </batch:step>
+
+    <!--listener for promoting properties in step execution context to job execution context-->
+    <bean:bean id="executionContextPromotionListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
+        <bean:property name="keys">
+            <bean:array>
+                <bean:value>public.path.fragment</bean:value>
+            </bean:array>
+        </bean:property>
+        <bean:property name="strict" value="false"/>
+    </bean:bean>
+
+
+    <!--load property files-->
+    <bean id="placeholderProperties"
+    class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+    <property name="location" value="classpath:common.properties" />
+
+    <property name="ignoreUnresolvablePlaceholders" value="true" />
+    <property name="order" value="1" />
+    </bean>
+
+
+    <bean id="ecrinService" class="uk.ac.ebi.ddi.ecrin.EcrinService"/>
+</beans>

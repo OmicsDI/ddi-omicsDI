@@ -59,6 +59,8 @@ public class DSField {
         public static final Field SPECIE_FIELD = new Field("species", UNKNOWN, ADDITIONAL, "Specie");
         public static final Field CELL_TYPE_FIELD = new Field("cell_type", UNKNOWN, ADDITIONAL, "Cell Type");
         public static final Field DISEASE_FIELD = new Field("disease", UNKNOWN, ADDITIONAL, "Disease");
+
+        public static final Field CONDITION_FIELD = new Field("condition", UNKNOWN, ADDITIONAL, "Condition");
         public static final Field TISSUE_FIELD = new Field("tissue", UNKNOWN, ADDITIONAL, "Tissue");
         public static final Field ADDITIONAL_ACCESSION = new Field("additional_accession", OPTIONAL, ADDITIONAL, "Additional Accession");
         public static final Field SECONDARY_ACCESSION = new Field("secondary_accession", OPTIONAL, ADDITIONAL, "Secondary Accession");
