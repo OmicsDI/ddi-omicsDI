@@ -1,0 +1,41 @@
+<database>
+    <name>ECRIN MDR</name>
+    <description>The MDR aggregates metadata describing clinical studies and the  data objects (both inputs and outputs) associated with them. It derives its data from trial registries, bibliographic resources and data repositories.</description>
+    <url>https://newmdr.ecrin.org</url>
+    <release>Dec23</release>
+    <release_date>2023-12-01</release_date>
+    <entry_count>250</entry_count>
+    <keywords>clinical research, clinical trials, interventional studies, cohort studies, observational health research</keywords>
+    <entries>
+        <entry id="106">
+            <name>A Study of Nanrilkefusp Alfa (SOT101) in Combination With Cetuximab to Evaluate the Efficacy and Safety in Patients With Colorectal Cancer</name>
+            <description>The primary objective of the study is to estimate the antitumor efficacy of nanrilkefusp alfa (SOT101) in combination with cetuximab in RAS wild-type colorectal cancer.</description>
+            <cross_references>
+                <ref dbname="ClinicalTrials.gov" dbkey="NCT05619172" />
+                <ref dbname="EU Clinical Trials Register" dbkey="2022-001527-32" />
+            </cross_references>
+            <dates>
+                <date type="creation" value="2022-12-15" />
+            </dates>
+            <additional_fields>
+                <field name="repository">ECRIN MDR</field>
+                <field name="full_dataset_link">https://newmdr.ecrin.org/Study/106</field>
+                <field name="study_type">Interventional</field>
+                <field name="study_status">Recruiting</field>
+                <field name="study_start_year">2022</field>
+                <field name="study_start_month">12</field>
+                <field name="condition">Colorectal Neoplasms</field>
+                <field name="condition">RAS wild-type colorectal cancer</field>
+                <field name="condition">Cáncer colorrectal RAS nativo</field>
+                <field name="condition">Colorectal Cancer</field>
+                <field name="keyword">Nanrilkefusp alfa</field>
+                <field name="keyword">AURELIO-05</field>
+                <field name="keyword">SO-C101</field>
+                <field name="keyword">SOT101</field>
+                <field name="keyword">Cetuximab</field>
+                <field name="location">Belgium, Czechia, France, Italy, Spain</field>
+                <field name="data_sharing_plan">IPD Sharing (as of September 2023): No</field>
+            </additional_fields>
+        </entry>
+    </entries>
+</database>
