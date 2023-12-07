@@ -63,7 +63,7 @@ public class DatasetImportTasklet extends AbstractTasklet {
         }
 
         //for(int i= 0 ; i < files.length; )
-        Collections.synchronizedList(Arrays.asList(files)).parallelStream().forEach(file -> {
+        Collections.synchronizedList(Arrays.asList(files)).stream().forEach(file -> {
             try {
                 LOGGER.info("processing file:" + file);
 
@@ -77,6 +77,8 @@ public class DatasetImportTasklet extends AbstractTasklet {
                     }
                     if(db.equals("INSDC Project")){
                         db = "ENA";
+                    }
+                    if(db.equalsIgnoreCase("ENA")){
                         dataEntry.addAdditionalField(DSField.Additional.REPOSITORY.key(),"ENA");
                         dataEntry.addAdditionalField(DSField.Additional.OMICS.key(),"Genomics");
                         dataEntry.addAdditionalField(DSField.Additional.LINK.key(),"https://www.ebi.ac.uk/ena/browser/view/" + dataEntry.getId());
