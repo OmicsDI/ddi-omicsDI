@@ -11,7 +11,7 @@ public class DocSection {
       private final String             accNo;
       private final String             type;
       private final List<DocAttribute> attributes;
-      private final List<String>       fileList;
+      private final FileList       fileList;
       private final List<DocSection>   sections;
       private final List<DocLink>      links;
 
@@ -21,7 +21,7 @@ public class DocSection {
                         @JsonProperty("accNo") String accNo,
                         @JsonProperty("type") String type,
                         @JsonProperty("attributes") List<DocAttribute> attributes,
-                        @JsonProperty("fileList") List<String> fileList,
+                        @JsonProperty("fileList") FileList fileList,
                         @JsonProperty("sections") List<DocSection> sections,
                         @JsonProperty("links") List<DocLink> links) {
          this.metaClass = metaClass;
@@ -54,7 +54,7 @@ public class DocSection {
          return attributes;
       }
 
-      public List<String> getFileList() {
+      public FileList getFileList() {
          return fileList;
       }
 
