@@ -405,7 +405,7 @@ public class DDIDatasetAnnotationService {
 
     public void updateDatasetClaim() {
         String[] sourceDatasets = {DB.PRIDE.getDBName(), DB.METABOLIGHTS.getDBName(),
-                DB.METABOLOMEEXPRESS.getDBName(), DB.ARRAY_EXPRESS.getDBName(), DB.MASSIVE.getDBName(),
+                DB.METABOLOMEEXPRESS.getDBName(), DB.BIOSTUDIES_ARRAY_EXPRESS.getDBName(), DB.MASSIVE.getDBName(),
                 DB.JPOST.getDBName()};
 
         datasetService.updateDatasetClaim(sourceDatasets);

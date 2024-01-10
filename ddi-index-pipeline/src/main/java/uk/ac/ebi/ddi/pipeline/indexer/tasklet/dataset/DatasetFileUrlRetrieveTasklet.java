@@ -50,7 +50,6 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
 
     public DatasetFileUrlRetrieveTasklet() {
         retrieverMap = new HashMap<String,DatasetFileUrlRetriever>();
-        retrieverMap.put("ArrayExpress" , new ArrayExpressFileUrlRetriever(retriever));
         retrieverMap.put("GEO" , new GEOFileUrlRetriever(retriever));
         retrieverMap.put("BioModels" , new BioModelsFileUrlRetriever(retriever));
         retrieverMap.put("ExpressionAtlas" , new ExpressionAtlasFileUrlRetriever(retriever));

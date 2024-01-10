@@ -9,7 +9,7 @@ public enum DB {
     EGA("EGA", "ega"),
     GPMDB("GPMDB",  "gpmdb"),
     GNPS("GNPS", "gnps"),
-    ARRAY_EXPRESS("ArrayExpress", "arrayexpress-repository"),
+    BIOSTUDIES_ARRAY_EXPRESS("biostudies-arrayexpress", "biostudies-arrayexpress"),
     METABOLOMEEXPRESS("MetabolomeExpress", "metabolome_express"),
     EXPRESSION_ATLAS("ExpressionAtlas", "atlas-experiments"),
     METABOLOMICSWORKBENCH("MetabolomicsWorkbench", "metabolomics_workbench"),
