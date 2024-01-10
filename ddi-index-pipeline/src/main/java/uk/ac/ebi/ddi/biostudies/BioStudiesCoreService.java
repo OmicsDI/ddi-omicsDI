@@ -97,9 +97,8 @@ public class BioStudiesCoreService {
                         dataset1.getAdditional().get("additional_accession")
                                 .add(dataset.getAccession());
                         updateDataset(dataset1);
-                    } else {
-                        updateDataset(dataset);
                     }
+                    updateDataset(dataset);
                 } else {
                     updateDataset(dataset);
                 }
