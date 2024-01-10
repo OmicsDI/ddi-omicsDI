@@ -34,7 +34,7 @@ import java.util.List;
 @Setter
 public class GenerateEBeyeExpressionAtlasXML extends AbstractTasklet {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GenerationArrayExpressXML.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(GenerateEBeyeExpressionAtlasXML.class);
 
     private String outputFile;
 

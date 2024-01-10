@@ -60,7 +60,7 @@
         <constructor-arg>
             <list>
                 <bean class="java.lang.String">
-                    <constructor-arg value="${ddi.common.arrayexpress.database.name}" />
+                    <constructor-arg value="${ddi.common.biostudies-arrayexpress.database.name}" />
                 </bean>
                 <bean class="java.lang.String">
                     <constructor-arg value="${ddi.common.pride.database.name}" />

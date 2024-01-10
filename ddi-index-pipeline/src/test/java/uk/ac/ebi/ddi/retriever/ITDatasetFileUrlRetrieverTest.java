@@ -16,7 +16,6 @@ public class ITDatasetFileUrlRetrieverTest {
     private IDatasetFileUrlRetriever retriever = new DefaultDatasetFileUrlRetriever();
 
     public ITDatasetFileUrlRetrieverTest() {
-        retriever = new ArrayExpressFileUrlRetriever(retriever);
         retriever = new GEOFileUrlRetriever(retriever);
         retriever = new BioModelsFileUrlRetriever(retriever);
         retriever = new ExpressionAtlasFileUrlRetriever(retriever);
@@ -34,10 +33,10 @@ public class ITDatasetFileUrlRetrieverTest {
 
     @Test
     public void testArrayExpress() throws IOException {
-        Set<String> files = retriever.getDatasetFiles("E-MEXP-2224", DB.ARRAY_EXPRESS.getDBName());
+        Set<String> files = retriever.getDatasetFiles("E-MEXP-2224", DB.BIOSTUDIES_ARRAY_EXPRESS.getDBName());
         Assert.assertEquals(7, files.size());
 
-        files = retriever.getDatasetFiles("E-GEOD-18213", DB.ARRAY_EXPRESS.getDBName());
+        files = retriever.getDatasetFiles("E-GEOD-18213", DB.BIOSTUDIES_ARRAY_EXPRESS.getDBName());
         Assert.assertEquals(4, files.size());
     }
 
