@@ -24,10 +24,11 @@
     <batch:job id="ddiImportJob" xmlns="http://www.springframework.org/schema/batch">
 
         <!--EB-eye XML generation for public project -->
+
         <batch:step id="genEbEyeXmlStep" parent="parentStep" next="validationXML">
             <batch:tasklet>
                 <bean:bean id="genEbEyeXmlTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.generation.GenerateFromAPIOmicsDITasklet">
-                    <bean:property name="generator" ref="iProXGenerator"/>
+                    <bean:property name="generator" ref="pxGenerator"/>
                 </bean:bean>
             </batch:tasklet>
         </batch:step>
@@ -320,24 +321,14 @@
 
     <bean:bean id="annotationService" class="uk.ac.ebi.ddi.annotation.service.synonyms.DDIAnnotationService"/>
 
-    <bean:bean id="iProXGenerator" class="uk.ac.ebi.ddi.api.readers.px.GeneratePxOmicsXML">
-        <constructor-arg index="0" value="${ddi.common.px.loop.gap}"/>
-        <constructor-arg index="1" value="${ddi.common.px.loop.end}"/>
-        <constructor-arg index="2" value="${ddi.common.px.acc.prefix}"/>
-        <constructor-arg index="3" value="${ddi.common.px.url}"/>
-        <constructor-arg index="4" value="${ddi.common.original.directory}${ddi.common.iprox.database.index}"/>
-        <constructor-arg index="5" ref="pxIPROX"/>
-        <constructor-arg index="6" value="#{currentDate}"/>
+
+    <bean:bean id="pxGenerator" class="uk.ac.ebi.ddi.api.readers.px.GeneratePxOmicsXML">
+        <constructor-arg index="0" value="${ddi.common.px.url}"/>
+        <constructor-arg index="1" value="${ddi.common.px.api.url}"/>
+        <constructor-arg index="2" value="${ddi.common.original.directory}${ddi.common.iprox.database.index}"/>
+        <constructor-arg index="3" value="iProX"/>
+        <constructor-arg index="4" value="#{currentDate}"/>
     </bean:bean>
-
-    <bean id="pxIPROX" class="java.util.ArrayList">
-        <constructor-arg>
-            <list>
-                <value>iProX</value>
-            </list>
-        </constructor-arg>
-    </bean>
-
 
     <!--load property files-->
     <bean id="placeholderProperties"
@@ -348,5 +339,5 @@
     <property name="order" value="1" />
 </bean>
 
-
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"></bean>
 </beans>

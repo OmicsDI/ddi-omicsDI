@@ -12,10 +12,7 @@ import uk.ac.ebi.ddi.pipeline.indexer.io.DDICleanDirectory;
 import uk.ac.ebi.ddi.pipeline.indexer.tasklet.AbstractTasklet;
 import uk.ac.ebi.ddi.pipeline.indexer.utils.FileUtil;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -70,11 +67,20 @@ public class DownloadPeptideAtlasSummaryFileTasklet extends AbstractTasklet {
             LOGGER.error("Exception occurred, ", e);
         }
 
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        // Install the all-trusting host verifier
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
         URL url = new URL(peptideAtlasSumamryFile);
         URLConnection connection = url.openConnection();
         try (InputStream is = connection.getInputStream();
             BufferedReader in = new BufferedReader(new InputStreamReader(is))) {
-
             String line;
             int count = 0;
             while ((line = in.readLine()) != null) {
@@ -83,6 +89,7 @@ public class DownloadPeptideAtlasSummaryFileTasklet extends AbstractTasklet {
                         String urlStr = line.split("\t")[3];
                         String fileName = urlStr.substring(urlStr.lastIndexOf('/') + 1);
                         String localPath = originalFolder + "/" + fileName;
+                        urlStr = urlStr.replaceAll("http://", "https://");
                         FileUtil.downloadFileFromURL(urlStr, localPath);
                     }
                 }

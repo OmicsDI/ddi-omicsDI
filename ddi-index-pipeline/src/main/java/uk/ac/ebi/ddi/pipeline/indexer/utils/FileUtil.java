@@ -4,10 +4,7 @@ package uk.ac.ebi.ddi.pipeline.indexer.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -208,7 +205,15 @@ public final class FileUtil {
         } catch (Exception e) {
             LOGGER.debug(e.getMessage());
         }
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
 
+        // Install the all-trusting host verifier
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
         URL url = new URL(urlStr);
         URLConnection connection = url.openConnection();
         try (InputStream is = connection.getInputStream();
