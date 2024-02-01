@@ -1,9 +1,14 @@
 package uk.ac.ebi.ddi.api.readers.px;
 
+import jakarta.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ddi.api.readers.model.IGenerator;
-import uk.ac.ebi.ddi.api.readers.px.utils.ReadProperties;
+import uk.ac.ebi.ddi.api.readers.px.json.model.ProteomicsResponse;
+import uk.ac.ebi.ddi.api.readers.px.json.model.Repository;
 import uk.ac.ebi.ddi.api.readers.px.utils.ReaderPxXML;
 import uk.ac.ebi.ddi.api.readers.px.xml.io.PxReader;
 import uk.ac.ebi.ddi.api.readers.utils.Constants;
@@ -14,6 +19,7 @@ import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -21,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -36,77 +43,85 @@ public class GeneratePxOmicsXML implements IGenerator {
 
     private static final String PXSUBMISSION_PATTERN = "<ProteomeXchangeDataset";
 
-    private List<String> databases = Arrays.asList("PRIDE", "MassIVE",
-            "PeptideAtlas", "jPOST", "iProX", "PanoramaPublic");
-
-    //"PRIDE", "MassIVE", "PeptideAtlas", "jPOST",
-    public int loopGap;
-
-    public int endPoint;
-
-    public String pxPrefix;
+    private List<String> databases = Arrays.asList("jPOST", "iProX", "PanoramaPublic");
 
     public String pxURL;
+    public String pxAPIURL;
+
+    public String repository;
 
     public String outputFolder;
 
     public String releaseDate;
 
+    @Autowired
+    RestTemplate restTemplate;
 
-    public GeneratePxOmicsXML(int loopGap, int endPoint, String pxPrefix, String pxURL, String outputFolder,
-                              String releaseDate) {
-        this.loopGap = loopGap;
-        this.endPoint = endPoint;
-        this.pxPrefix = pxPrefix;
+
+    public GeneratePxOmicsXML(String pxURL, String pxAPIURL, String outputFolder, String repository, String releaseDate) {
         this.pxURL = pxURL;
+        this.pxAPIURL = pxAPIURL;
         this.outputFolder = outputFolder;
+        this.repository = repository;
         this.releaseDate = releaseDate;
     }
-
-    public GeneratePxOmicsXML(int loopGap, int endPoint, String pxPrefix, String pxURL, String outputFolder,
-                              List<String> databases, String releaseDate) {
-        this.loopGap = loopGap;
-        this.endPoint = endPoint;
-        this.pxPrefix = pxPrefix;
-        this.pxURL = pxURL;
-        this.outputFolder = outputFolder;
-        this.releaseDate = releaseDate;
-        this.databases = databases;
-    }
-
+    @Override
     public void generate() throws Exception {
-
-        int initialGap = loopGap;
-        List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < endPoint && loopGap > 0; i++) {
-
-            String pxID = (pxPrefix + String.valueOf(i));
-            pxID = pxID.substring(pxID.length() - 6, pxID.length());
-            String pxURLProject = String.format(pxURL, pxID);
-            String page = getPage(pxURLProject);
-            if (page != null && isDataset(page)) {
-                PxReader dataset = ReaderPxXML.parseDocument(page);
-                if (dataset != null && dataset.getRepository() != null && databases.contains(dataset.getRepository())) {
-                    dataset.setAccession("PXD" + pxID);
-                    entries.add(Transformers.transformAPIDatasetToEntry(dataset));
-                    LOGGER.debug(dataset.getIdentifier());
-                }
-                loopGap = initialGap;
-
-            } else {
-                loopGap--;
-                LOGGER.debug(loopGap + "| LOGGER GAP CHANGE|");
+        ProteomicsResponse proteomicsResponse = restTemplate.getForObject(pxAPIURL, ProteomicsResponse.class);
+        AtomicInteger pagecount = new AtomicInteger(10000);
+        if(proteomicsResponse != null && proteomicsResponse.getFacets() != null){
+            ArrayList<Repository> repositories = proteomicsResponse.getFacets().getRepository();
+            if(!CollectionUtils.isEmpty(repositories)){
+                repositories.stream().forEach(
+                        repository -> {
+                            if(repository.getName().equalsIgnoreCase(this.repository)) {
+                                pagecount.set(repository.getCount());
+                            }
+                        }
+                );
             }
         }
+        proteomicsResponse = restTemplate.getForObject(pxAPIURL+ "?src=PCUI&pageNumber=1&pageSize="+pagecount.get()+"&repository="+repository+"&resultType=compact", ProteomicsResponse.class);
+        if(!CollectionUtils.isEmpty(proteomicsResponse.getDatasets())){
+            List<Entry> entries = new ArrayList<>();
+            proteomicsResponse.getDatasets().forEach( datasetObj -> {
+                if(datasetObj != null){
+                    String accession = datasetObj.get(0);
+                    String pxURLProject = String.format(pxURL, accession);
+                    String page = getPage(pxURLProject);
+                    if (page != null && isDataset(page)) {
+                        PxReader dataset = null;
+                        try{
+                            dataset = ReaderPxXML.parseDocument(page);
+                            if (dataset != null && dataset.getRepository() != null && databases.contains(dataset.getRepository())) {
+                                dataset.setAccession(accession);
+                                entries.add(Transformers.transformAPIDatasetToEntry(dataset));
+                            }
 
+                        } catch (JAXBException e){
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }
+            });
+            if(!CollectionUtils.isEmpty(entries)){
+                WriteEntriesToOutputFile(entries, outputFolder);
+            }
+        }
+    }
+
+    private void WriteEntriesToOutputFile(List<Entry> entries, String outputFolder) throws IOException {
         FileWriter pxdbFile = new FileWriter(outputFolder + "/px_data.xml");
 
         OmicsDataMarshaller mm = new OmicsDataMarshaller();
 
         Database database = new Database();
         database.setDescription(Constants.PX_DESCRIPTION);
-        if (databases.size() > 0) {
-            database.setName(databases.get(0));
+        if (repository != null) {
+            database.setName(repository);
         } else {
             database.setName(Constants.PX_DATABASE);
         }
@@ -141,7 +156,7 @@ public class GeneratePxOmicsXML implements IGenerator {
 
             connection.setConnectTimeout(10000); //set timeout to 10 seconds
 
-            connection.setReadTimeout(300000); // set timeout to 10 seconds
+            connection.setReadTimeout(300000); // set timeout to 30 seconds
 
             connection.connect();
 
@@ -166,50 +181,9 @@ public class GeneratePxOmicsXML implements IGenerator {
         return null;
     }
 
-    private static boolean isPRIDEDataset(String pxSubmission) {
-        String pridePattern = "hostingRepository=\"PRIDE\"";
-        return pxSubmission.contains(pridePattern);
-    }
-
     private static boolean isDataset(String pxSubmission) {
         return pxSubmission.contains(PXSUBMISSION_PATTERN);
     }
 
-    /**
-     * This program take an output folder as a parameter an create different EBE eyes files for
-     * all the project in ProteomeXchange. It loop all the project in ProteomeCentral and print them to the give output
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
 
-        String outputFolder = null;
-        String releaseDate = null;
-
-        //String outputFolder = "/partition/tmp/omics/original/iprox";
-        //String releaseDate = "20220809";
-
-        if (args != null && args.length > 1 && args[0] != null) {
-            outputFolder = args[0];
-            releaseDate = args[1];
-        } else {
-            System.exit(-1);
-        }
-        try {
-
-            String pxURL = ReadProperties.getInstance().getProperty("pxURL");
-            String pxPrefix = ReadProperties.getInstance().getProperty("pxPrefix");
-            Integer endPoint = Integer.valueOf(ReadProperties.getInstance().getProperty("pxEnd"));
-            Integer loopGap = Integer.valueOf(ReadProperties.getInstance().getProperty("loopGap"));
-
-            GeneratePxOmicsXML generator = new GeneratePxOmicsXML(loopGap, endPoint, pxPrefix, pxURL,
-                    outputFolder, releaseDate);
-            generator.generate();
-
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
 }

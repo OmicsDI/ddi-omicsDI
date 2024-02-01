@@ -8,6 +8,8 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import uk.ac.ebi.ddi.api.readers.model.IGenerator;
 import uk.ac.ebi.ddi.api.readers.px.GeneratePxOmicsXML;
 import uk.ac.ebi.ddi.pipeline.indexer.io.DDICleanDirectory;
@@ -31,17 +33,14 @@ public class GenerateEBeyePxXMLTasklet extends AbstractTasklet {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(GenerateEBeyePxXMLTasklet.class);
 
-    private String pxURL;
+    public String pxURL;
+    public String pxAPIURL;
 
-    private String pxPrefix;
+    public String outputFolder;
+    public String repository;
 
-    private int endPoint;
+    public String releaseDate;
 
-    private int loopGap;
-
-    private String outputDirectory;
-
-    private List<String> databases;
 
 
     @Override
@@ -50,9 +49,11 @@ public class GenerateEBeyePxXMLTasklet extends AbstractTasklet {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate localDate = LocalDate.now();
 
-        DDICleanDirectory.cleanDirectory(outputDirectory);
-        IGenerator generator = new GeneratePxOmicsXML(loopGap, endPoint, pxPrefix, pxURL, outputDirectory, databases,
-                dtf.format(localDate));
+        if(outputFolder != null){
+            DDICleanDirectory.cleanDirectory(outputFolder);
+        }
+
+        IGenerator generator = new GeneratePxOmicsXML(pxURL, pxAPIURL, outputFolder, repository, dtf.format(localDate));
         generator.generate();
         return RepeatStatus.FINISHED;
 
@@ -60,8 +61,8 @@ public class GenerateEBeyePxXMLTasklet extends AbstractTasklet {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(outputDirectory, "Output directory cannot be null.");
+        Assert.notNull(outputFolder, "Output directory cannot be null.");
         Assert.notNull(pxURL, "pxURL can't be null.");
-        Assert.notNull(pxPrefix, "pxPrefix can't be null.");
+        Assert.notNull(pxAPIURL, "pxAPIURL can't be null.");
     }
 }

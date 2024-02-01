@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.dataset.DatasetWsClient;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.domain.DomainWsClient;
 import uk.ac.ebi.ddi.ebe.ws.dao.client.europmc.CitationClient;
@@ -152,5 +153,9 @@ public class IndexerConfiguration {
         } catch (NumberFormatException ex) {
             return false;
         }
+    }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
