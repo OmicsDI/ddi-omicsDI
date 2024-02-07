@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database>
+    <name>BioModels</name>
+    <description>BioModels is a repository of mathematical models of biological processes.
+        Models described from literature are manually curated and enriched with cross-references.
+    </description>
+    <release>1</release>
+    <release_date>Wed Jan 31 18:05:18 GMT 2024</release_date>
+    <entry_count>937</entry_count>
+    <entries>
+        <entry id="MODEL1905220002">
+            <name>Heiland2019 - Two compartment model of NAD biosynthesis and consumption</name>
+            <description>The model is based on MODEL1905220001 but has two compartments that have different composition of the biosynthetic enzymes NADA and NamPT. One compartment contains in addition NNMT, the other one does not. Both compartments are competing for a common Nam source.</description>
+            <dates>
+                <date type="submission" value="2019-05-22" />
+                <date type="publication" value="2019-08-01" />
+                <date type="last_modification" value="2019-07-25" />
+            </dates>
+            <additional_fields>
+                <field name="submitter">Ines Heiland</field>
+                <field name="submitter_mail">ines.heiland@uit.no</field>
+                <field name="submitter_affiliation">Dept. of Arctic and Marine Biology, UiT The Arctic University of Norway, Tromsø Norway</field>
+                <field name="repository">BioModels</field>
+                <field name="full_dataset_link">https://www.ebi.ac.uk/biomodels/MODEL1905220002</field>
+                <field name="publication">10.1073/pnas.1902346116,
+                    Nicotinamide adenine dinucleotide (NAD) provides an important link between metabolism and signal transduction and has emerged as central hub between bioenergetics and all major cellular events. NAD-dependent signaling (e.g., by sirtuins and poly–adenosine diphosphate [ADP] ribose polymerases [PARPs]) consumes considerable amounts of NAD. To maintain physiological functions, NAD consumption and biosynthesis need to be carefully balanced. Using extensive phylogenetic analyses, mathematical modeling of NAD metabolism, and experimental verification, we show that the diversification of NAD-dependent signaling in vertebrates depended on 3 critical evolutionary events: 1) the transition of NAD biosynthesis to exclusive usage of nicotinamide phosphoribosyltransferase (NamPT); 2) the occurrence of nicotinamide N-methyltransferase (NNMT), which diverts nicotinamide (Nam) from recycling into NAD, preventing Nam accumulation and inhibition of NAD-dependent signaling reactions; and 3) structural adaptation of NamPT, providing an unusually high affinity toward Nam, necessary to maintain NAD levels. Our results reveal an unexpected coevolution and kinetic interplay between NNMT and NamPT that enables extensive NAD signaling. This has implications for therapeutic strategies of NAD supplementation and the use of NNMT or NamPT inhibitors in disease treatment.. null, null.
+                    UiT Arctic University of Norway, Tromsø</field>
+                <field name="omics_type">Models</field>
+                <field name="modelFormat">SBML</field>
+                <field name="submissionId">MODEL1905220002</field>
+                <field name="publication_year">2019</field>
+                <field name="levelVersion">L3V1</field>
+                <field name="curationStatus">Non-curated</field>
+                <field name="isPrivate">false</field>
+                <field name="publication_authors">Mathias Bockwoldt, Dorothée Houry, Marc Niere, Toni I. Gossmann, Ines Reinartz, Alexander Schug, Mathias Ziegler, Ines Heiland</field>
+                <field name="first_author">Mathias Bockwoldt</field>
+                <field name="tokenised_name">Heiland2019   Two compartment model of NAD biosynthesis and consumption</field>
+            </additional_fields>
+            <cross_references>
+                <ref dbkey="10__1073/pnas__1902346116" dbname="doi" />
+                <ref dbkey="10__1016/S0163-7258(00)00097-8" dbname="doi" />
+                <ref dbkey="10__1021/bi049592e" dbname="doi" />
+                <ref dbkey="2__4__2__11" dbname="ec-code" />
+                <ref dbkey="2__7__7__18" dbname="ec-code" />
+                <ref dbkey="2__7__7__1" dbname="ec-code" />
+                <ref dbkey="6__3__5__1" dbname="ec-code" />
+                <ref dbkey="3__1__3__5" dbname="ec-code" />
+                <ref dbkey="2__1__1__1" dbname="ec-code" />
+                <ref dbkey="3__5__1__-" dbname="ec-code" />
+                <ref dbkey="3__5__1__19" dbname="ec-code" />
+                <ref dbkey="2__4__2__12" dbname="ec-code" />
+                <ref dbkey="2__7__1__173" dbname="ec-code" />
+                <ref dbkey="2__4__2__1" dbname="ec-code" />
+                <ref dbkey="18823127" dbname="pubmed" />
+                <ref dbkey="17402747" dbname="pubmed" />
+                <ref dbkey="16118205" dbname="pubmed" />
+                <ref dbkey="4340699" dbname="pubmed" />
+                <ref dbkey="26385918" dbname="pubmed" />
+                <ref dbkey="9030766" dbname="pubmed" />
+                <ref dbkey="8182091" dbname="pubmed" />
+                <ref dbkey="2963591" dbname="pubmed" />
+                <ref dbkey="22229411" dbname="pubmed" />
+                <ref dbkey="19027704" dbname="pubmed" />
+                <ref dbkey="441255" dbname="brenda" />
+            </cross_references>
+        </entry>
+    </entries>
+</database>

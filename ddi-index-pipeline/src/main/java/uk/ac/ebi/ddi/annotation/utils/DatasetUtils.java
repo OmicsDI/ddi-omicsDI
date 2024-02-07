@@ -114,10 +114,11 @@ public class DatasetUtils {
             }
             if (dataset.getCrossReferences() != null && dataset.getCrossReferences().getRef() != null) {
                 crossReferences = dataset.getCrossReferences().getRef()
-                        .stream().parallel().filter(x -> x.getDbname() != null)
+                        .stream().filter(x -> x.getDbname() != null).filter(x -> x.getDbkey() != null)
                         .collect(Collectors.groupingBy(
                                 x -> x.getDbname().trim(),
-                                Collectors.mapping(x -> x.getDbkey().trim(), Collectors.toSet())));
+                                Collectors.mapping(x -> x.getDbkey().trim(), Collectors.toCollection(LinkedHashSet::new))));
+
             }
             if (dataset.getAdditionalFields() != null) {
                 additionals = dataset.getAdditionalFields().getField()
@@ -160,10 +161,10 @@ public class DatasetUtils {
             crossReferences = new HashMap<>();
             if (dataset.getCrossReferences() != null && dataset.getCrossReferences().getRef() != null) {
                 crossReferences = dataset.getCrossReferences().getRef()
-                        .stream().parallel().filter(x -> x.getDbname() != null).filter(x -> x.getDbkey() != null)
+                        .stream().filter(x -> x.getDbname() != null).filter(x -> x.getDbkey() != null)
                         .collect(Collectors.groupingBy(
                                 x -> x.getDbname().trim(),
-                                Collectors.mapping(x -> x.getDbkey().trim(), Collectors.toSet())));
+                                Collectors.mapping(x -> x.getDbkey().trim(), Collectors.toCollection(LinkedHashSet::new))));
             }
             if (dataset.getAdditionalFields() != null &&  dataset.getAdditionalFields().getField() != null) {
                 additionals = dataset.getAdditionalFields().getField()
