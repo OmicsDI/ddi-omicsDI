@@ -38,7 +38,7 @@ public class ImportGeoTasklet extends AbstractTasklet {
             LOGGER.warn("Input directory is empty, {}", inputDirectory.getFile().getAbsolutePath());
             return RepeatStatus.FINISHED;
         }
-        Collections.synchronizedList(Arrays.asList(files)).parallelStream().forEach(file -> {
+        Collections.synchronizedList(Arrays.asList(files)).stream().forEach(file -> {
             try {
                     LOGGER.info("processing file:{}",file);
                     geoService.saveEntries(file.getPath());

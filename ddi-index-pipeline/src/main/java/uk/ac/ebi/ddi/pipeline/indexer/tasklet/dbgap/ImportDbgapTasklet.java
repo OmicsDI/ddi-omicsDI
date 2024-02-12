@@ -36,7 +36,7 @@ public class ImportDbgapTasklet extends AbstractTasklet {
             LOGGER.warn("Input directory is empty, {}", inputDirectory.getFile().getAbsolutePath());
             return RepeatStatus.FINISHED;
         }
-        Collections.synchronizedList(Arrays.asList(files)).parallelStream().forEach(file -> {
+        Collections.synchronizedList(Arrays.asList(files)).stream().forEach(file -> {
             try {
                     LOGGER.info("processing file:{}",file);
                     dbgapService.saveEntries(file.getPath());
