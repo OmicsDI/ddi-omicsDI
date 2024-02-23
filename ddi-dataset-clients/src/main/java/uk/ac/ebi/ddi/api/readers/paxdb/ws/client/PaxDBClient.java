@@ -1,5 +1,6 @@
 package uk.ac.ebi.ddi.api.readers.paxdb.ws.client;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.ddi.api.readers.paxdb.ws.model.PaxDBDataset;
@@ -21,15 +22,13 @@ import java.util.Map;
 public class PaxDBClient {
 
     private String dataSetURL;
-    private String urlMappingIdentifiers;
     private String proteinIdentifiersURL;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxDBClient.class);
 
-    public PaxDBClient(String dataSetURL, String mappingIdentifiers, String proteinIdURL) {
+    public PaxDBClient(String dataSetURL,  String proteinIdURL) {
         this.dataSetURL = dataSetURL;
-        this.urlMappingIdentifiers = mappingIdentifiers;
         this.proteinIdentifiersURL = proteinIdURL;
     }
 
@@ -44,21 +43,14 @@ public class PaxDBClient {
         if (zipInputStreamFiles.size() > 0) {
             zipInputStreamFiles.forEach((key, value) -> {
                 try {
-                    paxDBDatasets.put(FileUtils.getNameFromInternalZipPath(key), PaxDBDatasetReader.readDataset(value));
+                    String fileName = FileUtils.getNameFromInternalZipPath(key);
+                    paxDBDatasets.put(fileName, PaxDBDatasetReader.readDataset(fileName,value));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
         }
 
-        ByteArrayOutputStream zipInputStreamFile = FileUtils.doInputStream(this.urlMappingIdentifiers);
-        Map<String, String> mapIdentifiers = PaxDBDatasetReader.readMapFileIdentifiers(zipInputStreamFile);
-
-        paxDBDatasets.forEach((key, value) -> {
-            if (mapIdentifiers.containsKey(key)) {
-                value.setFullLink(mapIdentifiers.get(key));
-            }
-        });
 
         Map<String, ByteArrayOutputStream> zipInputStreamProteinFiles =
                 FileUtils.doZipInputStream(this.proteinIdentifiersURL);

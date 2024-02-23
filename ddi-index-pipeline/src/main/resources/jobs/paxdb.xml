@@ -239,11 +239,8 @@
 
     <bean:bean id="annotationService" class="uk.ac.ebi.ddi.annotation.service.synonyms.DDIAnnotationService"/>
     <bean:bean id="paxdbWsConfig" class="uk.ac.ebi.ddi.api.readers.paxdb.ws.client.PaxDBClient">
-        <constructor-arg index="0" value="http://ftp.ebi.ac.uk/pub/databases/omicsdi/paxdb/paxdb-abundance-files-v4.2.zip"/>
-        <!--<constructor-arg index="0" value="http://pax-db.org/downloads/latest/datasets/paxdb-abundance-files-v4.1.zip"/>-->
-        <constructor-arg index="1" value="http://ftp.ebi.ac.uk/pub/databases/omicsdi/paxdb/omicsdb_export.tsv"/>
-        <constructor-arg index="2" value="http://ftp.ebi.ac.uk/pub/databases/omicsdi/paxdb/paxdb-uniprot-links-v4.2.zip"/>
-        <!--<constructor-arg index="2" value="https://pax-db.org/downloads/latest/paxdb-uniprot-links-v4_1.zip"/>-->
+        <constructor-arg index="0" value="https://pax-db.org/downloads/latest/datasets/paxdb-abundance-files-${ddi.common.paxdb.version}.zip"/>
+        <constructor-arg index="1" value="https://pax-db.org/downloads/latest/paxdb-uniprot-links-${ddi.common.paxdb.version}.zip"/>
     </bean:bean>
 
     <bean:bean id="paxdbGenerator" class="uk.ac.ebi.ddi.api.readers.paxdb.GeneratePaxDBOmicsXML">
