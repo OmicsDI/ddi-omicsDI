@@ -15,7 +15,7 @@ import java.util.*;
 
 public class PaxDBDataset implements IAPIDataset {
 
-    private String identifier = null;
+    private String identifier;
 
     private String name;
 
@@ -39,10 +39,12 @@ public class PaxDBDataset implements IAPIDataset {
 
     private String listProteins;
 
+    private String pubmed;
+
     private Map<String, Map.Entry<String, String>> abundanceProteins;
 
     public String getIdentifier() {
-        if (fullLink != null) {
+       /* if (fullLink != null) {
             String id = fullLink.replace(Constants.PAXDB_URL, "");
             StringBuilder finalId = new StringBuilder();
             Arrays.asList(id.split("/")).forEach(key -> {
@@ -52,7 +54,12 @@ public class PaxDBDataset implements IAPIDataset {
             });
             identifier = finalId.toString();
         }
+        return identifier;*/
         return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public void setName(String name) {
@@ -110,7 +117,7 @@ public class PaxDBDataset implements IAPIDataset {
     }
 
     public String getPublicationDate() {
-        return Constants.PAXDB_RELEASE_DATE;
+        return publicationDate;
     }
 
     @Override
@@ -159,9 +166,9 @@ public class PaxDBDataset implements IAPIDataset {
     @Override
     public Set<String> getSpecies() {
         Set<String> species = new HashSet<>();
-        if (name != null && name.length() > 0) {
-            if (name.split("-").length > 1) {
-                species.add(name.split("-")[0].trim());
+        if (fileName != null && fileName.length() > 0) {
+            if (fileName.split("-").length > 1) {
+                species.add(fileName.split("-")[0].trim());
             }
         }
         return species;
@@ -228,6 +235,14 @@ public class PaxDBDataset implements IAPIDataset {
         return Collections.EMPTY_SET;
     }
 
+    public String getPubmed() {
+        return pubmed;
+    }
+
+    public void setPubmed(String pubmed) {
+        this.pubmed = pubmed;
+    }
+
     @Override
     public Set<String> getDatasetFiles() {
         Set<String> files = new HashSet<>();
@@ -243,7 +258,7 @@ public class PaxDBDataset implements IAPIDataset {
         Set<String> ids = new HashSet<>();
         ids.add(Constants.PAXDB_PUBMED);
         //Add publication of the dataset
-        if (description != null && description.length() > 0 && description.contains("pubmed")) {
+        /*if (description != null && description.length() > 0 && description.contains("pubmed")) {
             Arrays.asList(description.split("&")).forEach(key -> {
                 if (key.contains("id=")) {
                     pubmedID[0] = key.split("=")[1];
@@ -252,8 +267,11 @@ public class PaxDBDataset implements IAPIDataset {
         }
         if (pubmedID[0] != null) {
             ids.add(pubmedID[0]);
+        }*/
+        if(pubmed != null){
+            crossReferences.put(DSField.CrossRef.PUBMED.getName(), Collections.singleton(pubmed));
         }
-        crossReferences.put(DSField.CrossRef.PUBMED.getName(), ids);
+
 
         Set<String> proteins = new HashSet<>();
         if (abundanceProteins != null && abundanceProteins.size() > 0) {
