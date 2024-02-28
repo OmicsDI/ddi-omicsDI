@@ -28,8 +28,13 @@ public class BioStudiesCoreService {
     public static final String DESCRIPTION = "Description";
     //public static final String
 
+    private static final String       PUBLICATION_LOOKUP_DOMAIN         = "europepmc";
+    private static final String       PUBLICATION_LOOKUP_ABSTRACT_FIELD = "description";
+    private static final List<String> PUBLICATION_LOOKUP_FIELDS         = Collections.singletonList(PUBLICATION_LOOKUP_ABSTRACT_FIELD);
     @Autowired
     DatasetService datasetService;
+
+    private final EbiSearchHttpLookup httpLookup = new EbiSearchHttpLookup("https://www.ebi.ac.uk/ebisearch/ws/rest");;
 
     Set<String> omicsType = new HashSet<String>();
 
@@ -167,6 +172,12 @@ public class BioStudiesCoreService {
                 else if ("Author".equals(section.getType())) {
                     // Handle the author
                     saveAuthor(section,dataset);
+                } /*else if ("Title".equalsIgnoreCase(section.getType())) {
+                    dataset.addAdditionalField(DSField.Additional.PUBMED_TITLE.key(),findAttributeByName(section.getAttributes(), "Title").getValue());
+                }*/
+                else if ("Publication".equals(section.getType())) {
+                    // Handle the publication data
+                    processPublicationSection(section,dataset);
                 }
             }
 
@@ -215,6 +226,60 @@ public class BioStudiesCoreService {
                 }
             }
         }
+    }
+
+    private void processPublicationSection(DocSection publicationSection, Dataset dataset) {
+        // Add the PMID, if present
+        String acc = null;
+        if (publicationSection.getAccNo() != null && !publicationSection.getAccNo().isEmpty()) {
+            acc = publicationSection.getAccNo();
+            DatasetUtils.addCrossReferenceValue(dataset, DSField.CrossRef.PUBMED.getName(), acc);
+        }
+        // Add the title and authors, if present
+        addAttributeValueIfNotNull(findAttributeByName(publicationSection.getAttributes(), "Title"), "pubmed_title", dataset);
+        addAttributeValueIfNotNull(findAttributeByName(publicationSection.getAttributes(), "Authors"), "pubmed_authors", dataset);
+        // Add the DOI xref, if present
+        DocAttribute doiAttr = findAttributeByName(publicationSection.getAttributes(), "DOI");
+        String doi = null;
+        if (attributeHasValue(doiAttr)) {
+            // Trim down to just the DOI, not the full URL
+            doi = doiAttr.getValue().replaceAll("^https?://doi\\.org/", "");
+            DatasetUtils.addCrossReferenceValue(dataset, DSField.CrossRef.DOI.getName(), doi);
+        }
+
+        // Fill in abstract, if available
+        String query = null;
+        if (acc != null) {
+            query = "id:" + acc;
+        }
+        else if (doi != null) {
+            query = String.format("DOI:\"%s\"", doi);
+        }
+
+        if (query != null) {
+            List<Map<String, Object>> response = httpLookup.search(PUBLICATION_LOOKUP_DOMAIN, query, PUBLICATION_LOOKUP_FIELDS, 1);
+            if (!response.isEmpty()) {
+                final String abstractValue = extractAbstractFromResult(response.get(0));
+                if (abstractValue != null && !abstractValue.isBlank()) {
+                    processField("pubmed_abstract", abstractValue,dataset);
+                }
+            }
+        }
+    }
+
+    private String extractAbstractFromResult(Map<String, Object> result) {
+        final String abstractString;
+        final Object abstractObject = result.get(PUBLICATION_LOOKUP_ABSTRACT_FIELD);
+        if (abstractObject instanceof List<?> abstractList && !abstractList.isEmpty()) {
+            abstractString = abstractList.stream().map(Object::toString).filter(s -> !s.isBlank()).collect(Collectors.joining("; "));
+        }
+        else if (abstractObject instanceof String absString) {
+            abstractString = absString;
+        }
+        else {
+            abstractString = null;
+        }
+        return abstractString;
     }
 
     private void processField(String fieldName , String fieldValue , Dataset dataset) {
