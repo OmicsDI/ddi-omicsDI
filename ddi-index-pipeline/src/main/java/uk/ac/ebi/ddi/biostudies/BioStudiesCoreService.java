@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import uk.ac.ebi.ddi.annotation.utils.DatasetUtils;
 import uk.ac.ebi.ddi.biostudies.model.*;
 import uk.ac.ebi.ddi.ddidomaindb.dataset.DSField;
@@ -32,6 +31,7 @@ public class BioStudiesCoreService {
     private static final String       PUBLICATION_LOOKUP_DOMAIN         = "europepmc";
     private static final String       PUBLICATION_LOOKUP_ABSTRACT_FIELD = "description";
     private static final List<String> PUBLICATION_LOOKUP_FIELDS         = Collections.singletonList(PUBLICATION_LOOKUP_ABSTRACT_FIELD);
+
     @Autowired
     DatasetService datasetService;
 
@@ -40,13 +40,13 @@ public class BioStudiesCoreService {
     Set<String> omicsType = new HashSet<String>();
 
     private static final Set<String> LINKS_TO_SKIP = Set.of("External link",    // Non-specific external links
-            "HipSci FTP site",  // FTP links, not xrefs
-            "kegg.pathway",     // no useful content, just "https"
-            "NA",               // Not applicable?
-            "Copyright",        // Plain text
-            "Disclaimer",       // Plain text
-            "Keywords",         // Plain text
-            "Received"          // Plain text
+                                                            "HipSci FTP site",  // FTP links, not xrefs
+                                                            "kegg.pathway",     // no useful content, just "https"
+                                                            "NA",               // Not applicable?
+                                                            "Copyright",        // Plain text
+                                                            "Disclaimer",       // Plain text
+                                                            "Keywords",         // Plain text
+                                                            "Received"          // Plain text
     );
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BioStudiesCoreService.class);
@@ -62,10 +62,8 @@ public class BioStudiesCoreService {
     }
 
     private void parseJsonBioStudies(InputStream is, String repository, Set<String> omicsType) throws IOException {
-
         // Create and configure an ObjectMapper instance
         ObjectMapper mapper = new ObjectMapper();
-        //mapper.registerModule(new JavaTimeModule());
         mapper.findAndRegisterModules();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -75,11 +73,11 @@ public class BioStudiesCoreService {
             final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             String line;
             while ((line = br.readLine()) != null) {
-                    final DocSubmission submission = objectMapper.readValue(line, DocSubmission.class);
-                    saveEntry(submission, repository, omicsType);
+                final DocSubmission submission = objectMapper.readValue(line, DocSubmission.class);
+                saveEntry(submission, repository, omicsType);
             }
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            e.printStackTrace();
         } finally {
             br.close();
         }
@@ -91,10 +89,11 @@ public class BioStudiesCoreService {
             Dataset dataset = transformSubmissionDataset(submission, repository, omicsType);
             saveMetadataDetails(submission, repository, dataset);
             if (!dataset.getAdditional().containsKey("additional_accession")) {
+                System.out.println("Data ready for save "+dataset.getAccession());
                 updateDataset(dataset);
             } else {
                 String accession = dataset.getAdditional().get("additional_accession")
-                        .iterator().next();
+                                          .iterator().next();
                 List<Dataset> datasetList = datasetService.findByAccession(accession);
                 if (datasetList.size() > 0) {
                     Dataset dataset1 =  datasetList.get(0);
@@ -118,11 +117,11 @@ public class BioStudiesCoreService {
             dataset.addAdditionalField(DSField.Additional.PUBMED_TITLE.key(),findAttributeByName(topLevelSection.getAttributes(), "Title").getValue());
             for (DocSection section : topLevelSection.getSections()) {
                 switch (section.getType()) {
-                    case "Funding" -> saveFundingFields(section,dataset);
-                    case "Publication" -> savePublicationFields(section,dataset);
-                    case "Author" -> saveAuthor(section,dataset);
-                    case "Organization" -> saveOrganisation(section,dataset);
-                    default -> { /* Do nothing */ }
+                case "Funding" -> saveFundingFields(section,dataset);
+                case "Publication" -> savePublicationFields(section,dataset);
+                case "Author" -> saveAuthor(section,dataset);
+                case "Organization" -> saveOrganisation(section,dataset);
+                default -> { /* Do nothing */ }
                 }
             }
         } else if (repository.equalsIgnoreCase("bioimages")){
@@ -136,17 +135,17 @@ public class BioStudiesCoreService {
                 for (DocSection section : topLevelSection.getSections()) {
                     if(section.getType() != null){
                         switch (section.getType()) {
-                            case "Author":
-                                saveAuthor(section,dataset);
-                                break;
-                            case "author":
-                                saveAuthor(section,dataset);
-                                break;
-                            case "Publication":
-                                savePublicationFields(section,dataset);
-                                break;
-                            default:
-                                saveFigure(section,dataset);
+                        case "Author":
+                            saveAuthor(section,dataset);
+                            break;
+                        case "author":
+                            saveAuthor(section,dataset);
+                            break;
+                        case "Publication":
+                            savePublicationFields(section,dataset);
+                            break;
+                        default:
+                            saveFigure(section,dataset);
                         }
                     }
                 }
@@ -219,11 +218,11 @@ public class BioStudiesCoreService {
             for (DocAttribute attr : topLevel.getAttributes()) {
                 if (attributeHasValue(attr)) {
                     switch (attr.getName()) {
-                        case "Abstract" -> processField("abstract", attr.getValue(),dataset);
-                        case "Project" -> processField("project", attr.getValue(),dataset);
-                        case "Experiment type" -> processField("experiment_type", attr.getValue(),dataset);
-                        case "Organism" -> processField("species", attr.getValue(),dataset);
-                        default -> addEfoCrossReference(attr,dataset);
+                    case "Abstract" -> processField("abstract", attr.getValue(),dataset);
+                    case "Project" -> processField("project", attr.getValue(),dataset);
+                    case "Experiment type" -> processField("experiment_type", attr.getValue(),dataset);
+                    case "Organism" -> processField("species", attr.getValue(),dataset);
+                    default -> addEfoCrossReference(attr,dataset);
                     }
                 }
             }
@@ -235,11 +234,11 @@ public class BioStudiesCoreService {
                 }
 
                 switch (section.getType()) {
-                    case "Author" -> saveAuthor(section,dataset);
-                    case "Organisation", "Organization" -> saveOrganisation(section,dataset);
-                    case "Publication" -> savePublicationFields(section,dataset);
-                    case "Funding" -> saveFundingFields(section,dataset);
-                    default -> { /* Do nothing */ }
+                case "Author" -> saveAuthor(section,dataset);
+                case "Organisation", "Organization" -> saveOrganisation(section,dataset);
+                case "Publication" -> savePublicationFields(section,dataset);
+                case "Funding" -> saveFundingFields(section,dataset);
+                default -> { /* Do nothing */ }
                 }
             }
 
@@ -455,13 +454,12 @@ public class BioStudiesCoreService {
                 continue;
             }
             switch (attr.getName()) {
-                case "Agency" -> dataset.addAdditionalField(DSField.Additional.FUNDING.key(),attr.getValue());
-                case "grant_id" -> dataset.addAdditionalField(DSField.Additional.FUNDING_GRANT_ID.key(),attr.getValue());
-                default -> { /* Do nothing */ }
+            case "Agency" -> dataset.addAdditionalField(DSField.Additional.FUNDING.key(),attr.getValue());
+            case "grant_id" -> dataset.addAdditionalField(DSField.Additional.FUNDING_GRANT_ID.key(),attr.getValue());
+            default -> { /* Do nothing */ }
             }
         }
     }
-
 
     private void savePublicationFields(DocSection publicationSection,Dataset dataset) {
         // Handle the attributes
@@ -471,14 +469,14 @@ public class BioStudiesCoreService {
             }
             Map<String, Set<String>> dates = new HashMap<String, Set<String>>();
             switch (attr.getName()) {
-                case "Journal" -> dataset.addAdditionalField(DSField.Additional.JOURNAL.key(),attr.getValue());
-                case "Volume" -> dataset.addAdditionalField(DSField.Additional.VOLUME.key(),attr.getValue());
-                case "Pages" -> dataset.addAdditionalField(DSField.Additional.PAGINATION.key(),attr.getValue());
-                case "Publication date" -> {
-                    dates.put(DSField.Date.PUBLICATION.key(), Collections.singleton(attr.getValue()));
-                    dataset.setDates(dates);
-                }
-                default -> { /* Do nothing */ }
+            case "Journal" -> dataset.addAdditionalField(DSField.Additional.JOURNAL.key(),attr.getValue());
+            case "Volume" -> dataset.addAdditionalField(DSField.Additional.VOLUME.key(),attr.getValue());
+            case "Pages" -> dataset.addAdditionalField(DSField.Additional.PAGINATION.key(),attr.getValue());
+            case "Publication date" -> {
+                dates.put(DSField.Date.PUBLICATION.key(), Collections.singleton(attr.getValue()));
+                dataset.setDates(dates);
+            }
+            default -> { /* Do nothing */ }
             }
         }
 
@@ -514,6 +512,7 @@ public class BioStudiesCoreService {
     }
 
     public Dataset transformSubmissionDataset(DocSubmission submissions, String repository, Set<String> omicsType) {
+        System.out.println("transform begin "+submissions.getAccNo());
         Dataset dataset = new Dataset();
         try {
             HashSet<String> datasetLink = new HashSet<String>();
@@ -526,26 +525,26 @@ public class BioStudiesCoreService {
             dataset.addAdditional("omics_type", omicsType);
             dataset.addAdditional("full_dataset_link", datasetLink);
             Map<String, String> sectionMap = submissions.getSection().getAttributes() != null ?
-                    submissions.getSection().getAttributes().stream().filter(attribute -> attribute.getName() != null && attribute.getValue() != null)
-                            .collect(Collectors.toMap(DocAttribute::getName, DocAttribute::getValue, (a1, a2) -> a1)) : null;
+                  submissions.getSection().getAttributes().stream().filter(attribute -> attribute.getName() != null && attribute.getValue() != null)
+                             .collect(Collectors.toMap(DocAttribute::getName, DocAttribute::getValue, (a1, a2) -> a1)) : null;
             Map<String, String> attributesMap = submissions.getAttributes() != null ?
-                    submissions.getAttributes().stream().filter(attribute -> attribute.getName() != null && attribute.getValue() != null)
-                            .collect(Collectors.toMap(DocAttribute::getName, DocAttribute::getValue, (a1, a2) -> a1)) : null;
+                  submissions.getAttributes().stream().filter(attribute -> attribute.getName() != null && attribute.getValue() != null)
+                             .collect(Collectors.toMap(DocAttribute::getName, DocAttribute::getValue, (a1, a2) -> a1)) : null;
 
             Map<String, String> linksMap = null;
             List<DocLink> linksList = submissions.getSection().getLinks();
             if (submissions.getSection() != null && submissions.getSection().getSections() != null) {
                 subsections = submissions.getSection().getSections()
-                        .stream().filter(r -> r.getType() != null && r.getType().equals("Author")).map(r -> r.getAttributes())
-                        .flatMap(x -> x.stream()).filter(attribute -> attribute.getName() != null && attribute.getValue() != null).collect(Collectors.toMap(DocAttribute::getName,
-                                DocAttribute::getValue, (a1, a2) -> a1));
+                                         .stream().filter(r -> r.getType() != null && r.getType().equals("Author")).map(r -> r.getAttributes())
+                                         .flatMap(x -> x.stream()).filter(attribute -> attribute.getName() != null && attribute.getValue() != null).collect(Collectors.toMap(DocAttribute::getName,
+                                                                                                                                                                             DocAttribute::getValue, (a1, a2) -> a1));
                 authors.add(subsections.get("Name"));
                 dataset.addAdditional("submitter", authors);
             }
             if (linksList != null && linksList.size() > 0 && linksList.get(0).getAttributes() != null) {
                 linksMap = linksList.stream().filter(l -> l.getAttributes() != null && l.getAttributes().size() > 0).map(DocLink::getAttributes)
-                        .flatMap(x -> x.stream()).filter(attribute -> attribute.getName() != null && attribute.getValue() != null).collect(Collectors.toMap(DocAttribute::getName,
-                                DocAttribute::getValue, (a1, a2) -> a1));
+                                    .flatMap(x -> x.stream()).filter(attribute -> attribute.getName() != null && attribute.getValue() != null).collect(Collectors.toMap(DocAttribute::getName,
+                                                                                                                                                                        DocAttribute::getValue, (a1, a2) -> a1));
             }
             if (linksMap != null && linksMap.containsKey("Type")) {
                 String accession = linksList.get(0).getUrl();
@@ -588,7 +587,9 @@ public class BioStudiesCoreService {
                 setOrganisms.add(sectionMap.get(ORGANISM.toString()));
                 dataset.getAdditional().put("species", setOrganisms);
             }
+            System.out.println("transform end "+submissions.getAccNo());
         } catch (Exception ex) {
+            ex.printStackTrace();
             LOGGER.error("exception while parsing submission into dataset in transformsubmission", ex.getMessage());
         }
         return dataset;
@@ -596,18 +597,20 @@ public class BioStudiesCoreService {
 
     protected static DocAttribute findAttributeByName(List<DocAttribute> attributes, String name) {
         return attributes.stream()
-                .filter(a -> name.equals(a.getName()))
-                .findFirst()
-                .orElse(null);
+                         .filter(a -> name.equals(a.getName()))
+                         .findFirst()
+                         .orElse(null);
     }
 
     private void updateDataset(Dataset dataset) {
         try {
             Dataset inDataset = datasetService.
-                    read(dataset.getAccession(), dataset.getDatabase());
+                  read(dataset.getAccession(), dataset.getDatabase());
             if (inDataset != null) {
+                System.out.println("update document "+dataset.getAccession());
                 datasetService.update(inDataset.getId(), dataset);
             } else {
+                System.out.println("save document "+dataset.getAccession());
                 datasetService.save(dataset);
             }
         } catch (Exception exception) {
