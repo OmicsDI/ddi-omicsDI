@@ -24,6 +24,7 @@ public class BioStudiesCoreService {
     public static final String ABSTRACT = "Abstract";
     public static final String EXPERIMENTTYPE = "Experiment type";
     public static final String ORGANISM = "Organism";
+    public static final String DISEASESTATE = "Diseasestate";
     public static final String PUBLICATION = "ReleaseDate";
     public static final String DESCRIPTION = "Description";
     //public static final String
@@ -62,7 +63,6 @@ public class BioStudiesCoreService {
 
     private void parseJsonBioStudies(InputStream is, String repository, Set<String> omicsType) throws IOException {
 
-        List<DocSubmission> submissionsList = new LinkedList<DocSubmission>();
         // Create and configure an ObjectMapper instance
         ObjectMapper mapper = new ObjectMapper();
         //mapper.registerModule(new JavaTimeModule());
@@ -162,7 +162,34 @@ public class BioStudiesCoreService {
                 addEfoCrossReference(studyTypeAttr,dataset);
             }
             addAttributeValueIfNotNull(findAttributeByName(topLevelSection.getAttributes(), "Description"), DSField.DESCRIPTION.key(), dataset);
-            addAttributeValueIfNotNull(findAttributeByName(topLevelSection.getAttributes(), "Organism"), DSField.Additional.SPECIE_FIELD.key(), dataset);
+            addAttributeValueIfNotNull(findAttributeByName(topLevelSection.getAttributes(), "Organism"), DSField.Additional.ORGANISM.key(), dataset);
+
+            if(topLevelSection != null){
+                for (DocSection section : topLevelSection.getSections()) {
+                    if(section.getType() != null){
+                        switch (section.getType()) {
+                        case "Author":
+                            saveAuthor(section,dataset);
+                            break;
+                        case "author":
+                            saveAuthor(section,dataset);
+                            break;
+                        case "Publication":
+                            processPublicationSection(section,dataset);
+                            break;
+                        case "Samples":
+                            saveDiseaseField(section,dataset);
+                            break;
+                        default:
+                            saveFigure(section,dataset);
+                        }
+                    }
+                }
+            }
+
+
+            //addAttributeValueIfNotNull(findAttributeByName(topLevelSection.getAttributes(), "DiseaseState"), DSField.Additional.DISEASE_FIELD.key(), dataset);
+
 
             for (DocSection section : topLevelSection.getSections()) {
                 if (section.getMetaClass().equals("ac.uk.ebi.biostd.persistence.doc.model.DocSectionTable")) {
@@ -403,8 +430,18 @@ public class BioStudiesCoreService {
         addAttributeValueIfNotNull(findAttributeByName(authorSection.getAttributes(), "Name"), DSField.Additional.PUBMED_AUTHORS.key(), dataset);
     }
 
-    private void saveOrganisation(DocSection organisationSection,  Dataset dataset) {
-        addAttributeValueIfNotNull(findAttributeByName(organisationSection.getAttributes(), "Name"),  DSField.Additional.ORGANISATION.key(), dataset);
+    private void saveDiseaseField(DocSection sampleSection, Dataset dataset) {
+        for (DocSection sampleChildSection : sampleSection.getSections()) {
+            if(sampleChildSection.getType().equalsIgnoreCase("Source Characteristics")) {
+                addAttributeValueIfNotNull(findAttributeByName(sampleChildSection.getAttributes(), DISEASESTATE), DSField.Additional.DISEASE_FIELD.key(), dataset);
+            }
+        }
+    }
+
+
+
+    private void saveOrganisation(DocSection diseaseSection,  Dataset dataset) {
+        addAttributeValueIfNotNull(findAttributeByName(diseaseSection.getAttributes(), "DiseaseState"), DSField.Additional.DISEASE_FIELD.key(), dataset);
     }
 
     protected void addAttributeValueIfNotNull(DocAttribute attr, String fieldName, Dataset dataset) {
@@ -424,6 +461,7 @@ public class BioStudiesCoreService {
             }
         }
     }
+
 
     private void savePublicationFields(DocSection publicationSection,Dataset dataset) {
         // Handle the attributes
