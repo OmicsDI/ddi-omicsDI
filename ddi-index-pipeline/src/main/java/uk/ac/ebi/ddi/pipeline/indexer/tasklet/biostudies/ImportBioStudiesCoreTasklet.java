@@ -33,10 +33,8 @@ public class ImportBioStudiesCoreTasklet extends AbstractTasklet {
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
         try {
             LOGGER.info("DataSet import, inputDirectory: {} ", inputDirectory.getURI());
-            System.out.println("DataSet import, inputDirectory:"+ inputDirectory.getURI());
             File inputFile = inputDirectory.getFile();
             if (inputFile == null) {
-                System.out.println("Input directory is empty"+inputDirectory.getFile().getAbsolutePath());
                 LOGGER.warn("Input directory is empty, {}", inputDirectory.getFile().getAbsolutePath());
                 return RepeatStatus.FINISHED;
             }
