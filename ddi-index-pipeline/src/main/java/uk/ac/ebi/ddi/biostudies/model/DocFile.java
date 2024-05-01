@@ -12,7 +12,6 @@ public  class DocFile {
       private final String             relPath;
       private final List<DocAttribute> attributes;
       private final String             md5;
-      private final Number             fileSize;
       private final String             fullPath;
       private final String             type;
 
@@ -23,7 +22,6 @@ public  class DocFile {
                      @JsonProperty("relPath") String relPath,
                      @JsonProperty("attributes") List<DocAttribute> attributes,
                      @JsonProperty("md5") String md5,
-                     @JsonProperty("fileSize") Number fileSize,
                      @JsonProperty("fullPath") String fullPath,
                      @JsonProperty("type") String type) {
          this.metaClass = metaClass;
@@ -32,7 +30,6 @@ public  class DocFile {
          this.relPath = relPath;
          this.attributes = attributes;
          this.md5 = md5;
-         this.fileSize = fileSize;
          this.fullPath = fullPath;
          this.type = type;
       }
@@ -59,10 +56,6 @@ public  class DocFile {
 
       public String getMd5() {
          return md5;
-      }
-
-      public Number getFileSize() {
-         return fileSize;
       }
 
       public String getFullPath() {

@@ -115,6 +115,7 @@ public class DSField {
         public static final Field IMAGE_NAME = new Field("image_name", UNKNOWN, ADDITIONAL, "image_name");
         public static final Field LEGEND = new Field("legend", UNKNOWN, ADDITIONAL, "legend");
         public static final Field STUDY_TYPE = new Field("study_type", UNKNOWN, ADDITIONAL, "study_type");
+        public static final Field ORGANISM = new Field("organism", UNKNOWN, ADDITIONAL, "organism");
 
     }
 
