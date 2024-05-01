@@ -89,7 +89,6 @@ public class BioStudiesCoreService {
             Dataset dataset = transformSubmissionDataset(submission, repository, omicsType);
             saveMetadataDetails(submission, repository, dataset);
             if (!dataset.getAdditional().containsKey("additional_accession")) {
-                System.out.println("Data ready for save "+dataset.getAccession());
                 updateDataset(dataset);
             } else {
                 String accession = dataset.getAdditional().get("additional_accession")
@@ -512,7 +511,6 @@ public class BioStudiesCoreService {
     }
 
     public Dataset transformSubmissionDataset(DocSubmission submissions, String repository, Set<String> omicsType) {
-        System.out.println("transform begin "+submissions.getAccNo());
         Dataset dataset = new Dataset();
         try {
             HashSet<String> datasetLink = new HashSet<String>();
@@ -587,7 +585,6 @@ public class BioStudiesCoreService {
                 setOrganisms.add(sectionMap.get(ORGANISM.toString()));
                 dataset.getAdditional().put("species", setOrganisms);
             }
-            System.out.println("transform end "+submissions.getAccNo());
         } catch (Exception ex) {
             ex.printStackTrace();
             LOGGER.error("exception while parsing submission into dataset in transformsubmission", ex.getMessage());
@@ -607,10 +604,8 @@ public class BioStudiesCoreService {
             Dataset inDataset = datasetService.
                   read(dataset.getAccession(), dataset.getDatabase());
             if (inDataset != null) {
-                System.out.println("update document "+dataset.getAccession());
                 datasetService.update(inDataset.getId(), dataset);
             } else {
-                System.out.println("save document "+dataset.getAccession());
                 datasetService.save(dataset);
             }
         } catch (Exception exception) {
