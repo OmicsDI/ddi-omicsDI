@@ -33,12 +33,59 @@ public class GeoService {
 
     private static final Map<String, String> MAPPED_FIELDS = Map.of(
             "entryType", "entry_type",
-            "gdsType", "gds_type",
             "valType", "val_type",
             "SeriesTitle", "series_title",
             "PlatformTitle", "platform_title",
             "PlatformTaxa", "platform_taxa",
             "SamplesTaxa", "samples_taxa"
+    );
+
+    public enum OmicsType {
+        TRANSCRIPTOMICS("Transcriptomics"),
+        GENOMICS("Genomics"),
+        METHYLATION_PROFILING("Methylation profiling"),
+        OTHER("Other"),
+        PROTEOMICS("Proteomics");
+
+        private final String label;
+
+        OmicsType(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
+
+    private static final Map<String, String> GDS_TYPE_OMICS_TYPE = Map.ofEntries(
+          Map.entry("Expression profiling by array", OmicsType.TRANSCRIPTOMICS.getLabel()),
+          Map.entry("Expression profiling by genome tiling array", OmicsType.TRANSCRIPTOMICS.getLabel()),
+          Map.entry("Expression profiling by high throughput sequencing", OmicsType.TRANSCRIPTOMICS.getLabel()),
+          Map.entry("Expression profiling by MPSS", OmicsType.TRANSCRIPTOMICS.getLabel()),
+          Map.entry("Expression profiling by RT-PCR", OmicsType.TRANSCRIPTOMICS.getLabel()),
+          Map.entry("Expression profiling by SAGE", OmicsType.TRANSCRIPTOMICS.getLabel()),
+          Map.entry("Expression profiling by SNP array", OmicsType.TRANSCRIPTOMICS.getLabel()),
+          Map.entry("Genome binding/occupancy profiling by array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Genome binding/occupancy profiling by genome tiling array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Genome binding/occupancy profiling by high throughput sequencing", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Genome binding/occupancy profiling by SNP array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Genome variation profiling by array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Genome variation profiling by genome tiling array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Genome variation profiling by high throughput sequencing", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Genome variation profiling by SNP array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Non-coding RNA profiling by array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Non-coding RNA profiling by genome tiling array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Non-coding RNA profiling by high throughput sequencing", OmicsType.GENOMICS.getLabel()),
+          Map.entry("SNP genotyping by SNP array", OmicsType.GENOMICS.getLabel()),
+          Map.entry("Methylation profiling by array", OmicsType.METHYLATION_PROFILING.getLabel()),
+          Map.entry("Methylation profiling by genome tiling array", OmicsType.METHYLATION_PROFILING.getLabel()),
+          Map.entry("Methylation profiling by high throughput sequencing", OmicsType.METHYLATION_PROFILING.getLabel()),
+          Map.entry("Methylation profiling by SNP array", OmicsType.METHYLATION_PROFILING.getLabel()),
+          Map.entry("Other", OmicsType.OTHER.getLabel()),
+          Map.entry("Third-party reanalysis", OmicsType.OTHER.getLabel()),
+          Map.entry("Protein profiling by Mass Spec", OmicsType.PROTEOMICS.getLabel()),
+          Map.entry("Protein profiling by protein array", OmicsType.PROTEOMICS.getLabel())
     );
 
     @Autowired
@@ -82,12 +129,10 @@ public class GeoService {
 
     private void processDocSumEntry(DocSum docSum){
         Dataset dataset = new Dataset();
-        omicsType.add("Unknown");
         docSum.getItem().stream().forEach(
               item ->   {
                   dataset.setDatabase("GEO");
                   dataset.addAdditional("repository", new HashSet<>(Arrays.asList("GEO")));
-                  dataset.addAdditional("omics_type", omicsType);
                   dataset.setCurrentStatus(DatasetCategory.INSERTED.getType());
                   if(item.getType().equalsIgnoreCase("String")) {
                       //Core fields
@@ -99,6 +144,8 @@ public class GeoService {
         );
         updateDataset(dataset);
     }
+
+    
 
     private static void processListData(Dataset dataset, Item item) {
         if(item.getName().equalsIgnoreCase("PubMedIds") && !item.getItem().isEmpty()){
@@ -208,8 +255,25 @@ public class GeoService {
                 dataset.addAdditionalField(MAPPED_FIELDS.get(item.getName()), item.getContent().get(0));
             }
         }
+        else if (item.getName().equalsIgnoreCase("gdsType")) {
+            if(!CollectionUtils.isEmpty(item.getContent())){
+                addGdsType(item.getContent().get(0),dataset);
+            }
+        }
     }
 
+    protected void addGdsType(final String gdsType, Dataset dataset) {
+        Boolean omics = false;
+        if (gdsType != null && gdsType.length() > 0) {
+            for (String gds : Arrays.stream(gdsType.split(";")).toList()) {
+                if (!omics && GDS_TYPE_OMICS_TYPE.containsKey(gds)) {
+                    omics = true;
+                    dataset.addAdditional("omics_type", new HashSet<>(Arrays.asList(GDS_TYPE_OMICS_TYPE.get(gds))));
+                }
+                dataset.addAdditionalField("gds_type", gds);
+            }
+        }
+    }
 
     public void updateDataset(Dataset dataset) {
         try {
