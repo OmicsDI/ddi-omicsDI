@@ -8,7 +8,7 @@ The RESTful API interface for the OmicsDI Web Services is available at
 [Documentation](http://blog.omicsdi.org/post/introduction-api/)
 
 OmicsDI Data Format Specification can be found [here](http://blog.omicsdi.org/post/omicsdi-spec/)
-Test
+Test Commit
 ## Prerequisite
 OpenJDK 17*
 Spring 6 , SpringBoot 3
