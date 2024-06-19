@@ -154,7 +154,7 @@ public class GeneratePxOmicsXML implements IGenerator {
             // send the request
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            connection.setConnectTimeout(10000); //set timeout to 10 seconds
+            connection.setConnectTimeout(60000); //set timeout to 10 seconds
 
             connection.setReadTimeout(300000); // set timeout to 30 seconds
 
