@@ -25,7 +25,7 @@
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg ref="simpleMongoDbFactoryID" />
     </bean>-->
-    <mongo:mongo-client  connection-string="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000"></mongo:mongo-client>
+    <mongo:mongo-client  connection-string="mongodb://${ddi.common.mongo.app.user}:${ddi.common.mongo.app.password}@${ddi.common.mongo.app.machine.one}:${ddi.common.mongo.app.port},${ddi.common.mongo.app.machine.two}:${ddi.common.mongo.app.port}/${ddi.common.mongo.app.db}?authSource=${ddi.common.mongo.app.authenticationDatabase}&amp;replicaSet=${ddi.common.mongo.app.replicaset&amp;readPreference=${ddi.common.mongo.app.readPreference}&amp;reconnectTries=10&amp;serverSelectionTimeoutMS=200000&amp;connectTimeoutMS=200000"></mongo:mongo-client>
     <mongo:db-factory id="simpleMongoDbFactoryID"  mongo-client-ref="mongoClient" />
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg ref="simpleMongoDbFactoryID" />

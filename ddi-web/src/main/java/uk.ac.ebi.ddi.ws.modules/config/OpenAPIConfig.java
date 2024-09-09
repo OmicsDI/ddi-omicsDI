@@ -59,6 +59,9 @@ public class OpenAPIConfig {
   @Value("${ddi.common.mongo.app.replicaset}")
   private String mongoAppReplicaset;
 
+   @Value("${ddi.common.mongo.app.readPreference}")
+   private String mongoAppReadPreference;
+
   @Bean
   public OpenAPI myOpenAPI() {
     Server devServer = new Server();
@@ -133,7 +136,7 @@ public class OpenAPIConfig {
 
  @Bean("simpleMongoDbFactoryID")
  public MongoDatabaseFactory mongoDatabaseFactory(){
-    return new SimpleMongoClientDatabaseFactory("mongodb://"+mongoAppUser+":"+mongoAppPassword+"@"+mongoPrimaryHost+":"+mongoPort+","+mongoSecondaryHost+":"+mongoPort+"/"+mongoAppDB+"?authSource="+mongoAppAuthDB+"&replicaSet="+mongoAppReplicaset+"&serverSelectionTimeoutMS=200000&connectTimeoutMS=200000");
+    return new SimpleMongoClientDatabaseFactory("mongodb://"+mongoAppUser+":"+mongoAppPassword+"@"+mongoPrimaryHost+":"+mongoPort+","+mongoSecondaryHost+":"+mongoPort+"/"+mongoAppDB+"?authSource="+mongoAppAuthDB+"&replicaSet="+mongoAppReplicaset+"&readPreference="+mongoAppReadPreference+"&serverSelectionTimeoutMS=200000&connectTimeoutMS=200000");
  }
 
     @Bean
