@@ -52,6 +52,9 @@ public class IndexerConfiguration {
 
     @Value("${ddi.common.mongo.app.replicaset}")
     private String mongoAppReplicaset;
+
+    @Value("${ddi.common.mongo.app.readPreference}")
+    private String mongoAppReadPreference;
 /*
 
     @Value("${ddi.common.elastic.app.host}")
@@ -100,7 +103,7 @@ public class IndexerConfiguration {
 
     @Bean("simpleMongoDbFactoryID")
     public MongoDatabaseFactory mongoDatabaseFactory(){
-        return new SimpleMongoClientDatabaseFactory("mongodb://"+mongoAppUser+":"+mongoAppPassword+"@"+mongoPrimaryHost+":"+mongoPort+","+mongoSecondaryHost+":"+mongoPort+"/"+mongoAppDB+"?authSource="+mongoAppAuthDB+"&replicaSet="+mongoAppReplicaset+"&serverSelectionTimeoutMS=200000&connectTimeoutMS=200000");
+        return new SimpleMongoClientDatabaseFactory("mongodb://"+mongoAppUser+":"+mongoAppPassword+"@"+mongoPrimaryHost+":"+mongoPort+","+mongoSecondaryHost+":"+mongoPort+"/"+mongoAppDB+"?authSource="+mongoAppAuthDB+"&replicaSet="+mongoAppReplicaset+"&readPreference="+mongoAppReadPreference+"&serverSelectionTimeoutMS=200000&connectTimeoutMS=200000");
     }
 
    /* @Bean("elasticSearchWsConfig")
