@@ -744,9 +744,9 @@ public class DatasetController {
         List<String> errorList = new LinkedList<String>();
 
 
-            List<Tuple> errors = OmicsXMLFile.validateSemantic(targetFile);
+            List<Tuple<String,String>> errors = OmicsXMLFile.validateSemantic(targetFile);
             //errors.addAll(OmicsXMLFile.validateSchema(targetFile));
-            errors.stream().forEach(r -> System.out.println(r.getValue()));
+            errors.stream().map(Tuple::getValue).forEach(LOGGER::debug);
 
             if (!isError) {
                 errorList = errors.stream().map(rt -> updateMessage(rt.getValue().toString(), validatorType)).
@@ -1190,7 +1190,7 @@ public class DatasetController {
         Content[] result = new Content[0];
         try {
             if (result.length == 0) {
-                LOGGER.info("drs is not continued");
+                LOGGER.trace("drs is not continued");
             }
            /* result = restTemplate.getForObject(
                     "http://hx-rke-wp-webadmin-21-master-1.caas.ebi.ac.uk:30008/datasets/{database}/{accession}",

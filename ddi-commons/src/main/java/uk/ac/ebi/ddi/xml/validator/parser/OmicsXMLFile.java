@@ -469,8 +469,8 @@ public class OmicsXMLFile {
         return false;
     }
 
-    public static Set<Tuple> validateDatabase(File file){
-        Set<Tuple> errors = new HashSet<Tuple>();
+    public static Set<Tuple<String,String>> validateDatabase(File file){
+        Set<Tuple<String,String>> errors = new HashSet<>();
         try {
             OmicsXMLFile reader = new OmicsXMLFile(file);
 
@@ -520,17 +520,17 @@ public class OmicsXMLFile {
         return errors;
     }
 
-    public static List<Tuple> validateSemantic(File file) {
-        List<Tuple> errors = new ArrayList<Tuple>();
+    public static List<Tuple<String,String>> validateSemantic(File file) {
+        List<Tuple<String,String>> errors = new ArrayList<>();
         try {
             OmicsXMLFile reader = new OmicsXMLFile(file);
 
-            Set<Tuple> dbErrors = Utils.validateDatabase(reader.database);
+            Set<Tuple<String,String>> dbErrors = Utils.validateDatabase(reader.database);
             List<String> ids = reader.getEntryIds();
             errors.addAll(dbErrors);
             // Retrive all the entries and retrieve the warning semantic validation
             for (String id : ids) {
-                List<Tuple> datasetErrors = Utils.validateSemantic(reader.getEntryById(id));
+                List<Tuple<String,String>> datasetErrors = Utils.validateSemantic(reader.getEntryById(id));
                 errors.addAll(datasetErrors);
             }
 

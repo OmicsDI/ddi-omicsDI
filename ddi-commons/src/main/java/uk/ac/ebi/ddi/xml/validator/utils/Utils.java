@@ -31,9 +31,9 @@ public class Utils {
     private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
 
-    public static List<Tuple> validateSemantic(Entry entry) {
+    public static List<Tuple<String, String>> validateSemantic(Entry entry) {
 
-        List<Tuple> errors = new ArrayList<Tuple>();
+        List<Tuple<String,String>> errors = new ArrayList<>();
 
         if (entry.getId() == null || entry.getId().isEmpty()) {
             errors.add(new Tuple<>(ERROR, "[" + entry.getId() + "]" + COLON + REPORT_SPACE + "["+ ERROR+"]" + COLON + REPORT_SPACE + NOT_FOUND_MESSAGE +
@@ -136,9 +136,9 @@ public class Utils {
         return false;
     }
 
-    public static Set<Tuple> validateDatabase(SummaryDatabase summaryDatabase){
+    public static Set<Tuple<String,String>> validateDatabase(SummaryDatabase summaryDatabase){
 
-        Set<Tuple> errors = new HashSet<Tuple>();
+        Set<Tuple<String,String>> errors = new HashSet<>();
 
         if (summaryDatabase.getName() == null || summaryDatabase.getName().isEmpty()) {
             errors.add(new Tuple<>(ERROR, "["+ ERROR+"]" + COLON + REPORT_SPACE + DATABASE_NOT_FOUND_MESSAGE +
