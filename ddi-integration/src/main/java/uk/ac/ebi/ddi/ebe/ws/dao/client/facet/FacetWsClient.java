@@ -30,13 +30,13 @@ public class FacetWsClient extends EbeyeClient {
      * @return Return a facet field with the information of the term
      */
     public FacetList getFacetEntriesByDomains(String parentdomain, String[] domains, String facetField, int count) {
-
-        String[] domainToSearch = domains;
+        //TODO : need to investigate if this causes any issue in EBISearch
+        /*String[] domainToSearch = domains;
         if (domains.length > MAX_DOMAIN) {
             domainToSearch = Arrays.copyOfRange(domains, 0, MAX_DOMAIN);
-        }
+        }*/
 
-        String domain = String.join(" " + Constans.OR + " ", domainToSearch);
+        String domain = String.join(" " + Constans.OR + " ", domains);
 
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
                 .scheme(config.getProtocol())
