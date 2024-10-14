@@ -86,7 +86,7 @@ public class OpenAPIConfig {
         .description("Programmatic access to the Data Discovery Index data via RESTful Web Services.").termsOfService("https://www.ebi.ac.uk/about/terms-of-use")
         .license(mitLicense);
 
-    return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+    return new OpenAPI().info(info).servers(List.of(prodServer,devServer));
   }
 
   @Bean("ebeyeWsConfigDev")
