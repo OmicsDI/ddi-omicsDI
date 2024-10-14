@@ -22,6 +22,10 @@ public class DSField {
 
         public static final Field CREATION = new Field("creation", FieldType.OPTIONAL, FieldCategory.DATE, "Dataset Creation Date");
         public static final Field SUBMISSION = new Field("submission", FieldType.OPTIONAL, FieldCategory.DATE, "Dataset Submission Date");
+        public static final Field RELEASE = new Field("release", FieldType.OPTIONAL, FieldCategory.DATE, "Dataset Release Date");
+        public static final Field MODIFICATION = new Field("modification", FieldType.OPTIONAL, FieldCategory.DATE, "Dataset Modification Date");
+
+
     }
 
     public static class CrossRef {

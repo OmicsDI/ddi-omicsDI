@@ -25,6 +25,9 @@ public class BioStudiesCoreService {
     public static final String ORGANISM = "Organism";
     public static final String DISEASESTATE = "Diseasestate";
     public static final String PUBLICATION = "ReleaseDate";
+    public static final String RELEASED = "releaseTime";
+    public static final String MODIFICATION = "modificationTime";
+    public static final String CREATION = "creationTime";
     public static final String DESCRIPTION = "Description";
     //public static final String
 
@@ -467,6 +470,9 @@ public class BioStudiesCoreService {
                 continue;
             }
             Map<String, Set<String>> dates = new HashMap<String, Set<String>>();
+            if(dataset.getDates() != null){
+                dates.putAll(dataset.getDates());
+            }
             switch (attr.getName()) {
             case "Journal" -> dataset.addAdditionalField(DSField.Additional.JOURNAL.key(),attr.getValue());
             case "Volume" -> dataset.addAdditionalField(DSField.Additional.VOLUME.key(),attr.getValue());
@@ -565,16 +571,39 @@ public class BioStudiesCoreService {
                 dataset.setName(sectionMap.get(TITLE.toString()));
             }
 
-            HashSet<String> setData = new HashSet<String>();
             HashSet<String> setOrganisms = new HashSet<String>();
 
+            Map<String, Set<String>> dates = new HashMap<String, Set<String>>();
             if(!dataset.getDates().containsKey(DSField.Date.PUBLICATION.key())){
-                Map<String, Set<String>> dates = new HashMap<String, Set<String>>();
+                HashSet<String> setData = new HashSet<String>();
                 if (attributesMap != null && attributesMap.containsKey(PUBLICATION.toString())) {
                     setData.add(attributesMap.get(PUBLICATION.toString()));
                 }
-                //dates.put()
                 dates.put("publication", setData);
+            }
+            if(!dataset.getDates().containsKey(DSField.Date.RELEASE.key())){
+                HashSet<String> setData = new HashSet<String>();
+                if (submissions.getReleaseTime() != null) {
+                    setData.add(submissions.getReleaseTime().date());
+                }
+                dates.put(DSField.Date.RELEASE.key(), setData);
+            }
+            if(!dataset.getDates().containsKey(DSField.Date.MODIFICATION.key())){
+                HashSet<String> setData = new HashSet<String>();
+                if (submissions.getModificationTime() != null) {
+                    setData.add(submissions.getModificationTime().date());
+                }
+                dates.put(DSField.Date.MODIFICATION.key(), setData);
+            }
+            if(!dataset.getDates().containsKey(DSField.Date.CREATION.key())){
+                HashSet<String> setData = new HashSet<String>();
+                if (submissions.getCreationTime() != null) {
+                    setData.add(submissions.getCreationTime().date());
+                }
+                dates.put(DSField.Date.CREATION.key(), setData);
+            }
+
+            if(!dates.isEmpty()){
                 dataset.setDates(dates);
             }
 

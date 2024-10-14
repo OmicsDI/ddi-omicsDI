@@ -2,7 +2,17 @@ package uk.ac.ebi.ddi.biostudies.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import java.io.IOException;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 public  class DocSubmission {
@@ -28,6 +38,8 @@ public  class DocSubmission {
       private final List<DocCollection> collections;
       private final List<DocFile>       pageTabFiles;
       private final String              storageMode;
+      private static final String LONG_NUMBER_FIELD = "$numberLong";
+      private static final String DATE_FIELD        = "$date";
 
       @JsonCreator
       public DocSubmission(@JsonProperty("_id") IdField metaId,
@@ -157,4 +169,42 @@ public  class DocSubmission {
       public String getStorageMode() {
          return storageMode;
       }
+
+      @JsonDeserialize(using = DateFieldDeserializer.class)
+      public record DateField(String date) {
+      }
+
+      public static class DateFieldDeserializer extends StdDeserializer<DateField> {
+      public DateFieldDeserializer() {
+         this(null);
+      }
+
+      protected DateFieldDeserializer(Class<?> vc) {
+         super(vc);
+      }
+
+      @Override
+      public DateField deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+         JsonNode dateNode = node.get(DATE_FIELD);
+         if (dateNode.isTextual()) {
+            return new DateField(dateNode.asText());
+         }
+
+         if (dateNode.isObject() && dateNode.get(LONG_NUMBER_FIELD) != null) {
+            final long dateValue;
+            if (dateNode.get(LONG_NUMBER_FIELD).isLong()) {
+               dateValue = dateNode.get(LONG_NUMBER_FIELD).longValue();
+            }
+            else {
+               dateValue = Long.parseLong(dateNode.get(LONG_NUMBER_FIELD).asText());
+            }
+            Date date = new Date(dateValue);
+            return new DateField(ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME));
+         }
+
+         return null;
+      }
+   }
+
    }
