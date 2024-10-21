@@ -109,16 +109,10 @@ public class DDIDatasetAnnotationService {
                             currentDataset.getDates().get("publication").toString());
                 }
             }
+            LOGGER.info("Inithashcode of " + dbDataset.getAccession() + " is changed, previous: {}, current: {}",
+                    currentDataset.getInitHashCode(), dbDataset.getInitHashCode());
 
-            if (currentDataset.getInitHashCode() != dbDataset.getInitHashCode() ||
-                    !currentDataset.getAdditionalField(DSField.Additional.OMICS.key()).
-                            containsAll(dbDataset.getAdditionalField(DSField.Additional.OMICS.key()))
-                   ) {
-                LOGGER.info("Inithashcode of " + dbDataset.getAccession() + " is changed, previous: {}, current: {}",
-                        currentDataset.getInitHashCode(), dbDataset.getInitHashCode());
-
-                updateDataset(currentDataset, dbDataset);
-            }
+            updateDataset(currentDataset, dbDataset);
         } else {
             LOGGER.info("inserting dataset as dataset is not available");
             LOGGER.info("dataset is " + dbDataset.toString());

@@ -42,6 +42,7 @@ public class DatasetFileUrlRetrieveTasklet extends AbstractTasklet {
 
     private List<String> processed = new ArrayList<>();
 
+    //We need to evaluate this value whenever we change no of cpu passing to this job
     private static final int PARALLEL = Math.min(8, Runtime.getRuntime().availableProcessors());
 
     private boolean overwrite;
