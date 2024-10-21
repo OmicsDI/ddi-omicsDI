@@ -70,6 +70,7 @@ public class DatasetImportTasklet extends AbstractTasklet {
                 OmicsXMLFile omicsXMLFile = new OmicsXMLFile(file);
 
                 List<Entry> entries = omicsXMLFile.getAllEntries();
+
                 for (Entry dataEntry : entries) {
                     String db = databaseName != null ? databaseName : omicsXMLFile.getDatabaseName() != null ? omicsXMLFile.getDatabaseName() : "NA";
                     if ("".equals(db)) {
@@ -84,7 +85,7 @@ public class DatasetImportTasklet extends AbstractTasklet {
                         dataEntry.addAdditionalField(DSField.Additional.LINK.key(),"https://www.ebi.ac.uk/ena/browser/view/" + dataEntry.getId());
                     }
                                long submitterCount = dataEntry.getAdditionalFields() != null ?
-                            dataEntry.getAdditionalFields().getField().parallelStream().
+                            dataEntry.getAdditionalFields().getField().stream().
                             filter(fld -> fld.getName()
                                     .equals(DSField.Additional.SUBMITTER_KEYWORDS.key())).count() : 0;
                     if (submitterCount > 0) {
@@ -92,7 +93,7 @@ public class DatasetImportTasklet extends AbstractTasklet {
                                 .getAdditionalFieldValues(DSField.Additional.SUBMITTER_KEYWORDS.key());
                         if (keywordSet != null) {
                             Entry finalDataEntry = dataEntry;
-                            keywordSet.parallelStream().flatMap(dt -> {
+                            keywordSet.stream().flatMap(dt -> {
                                     if (dt.contains(Constants.SEMI_COLON_TOKEN)) {
                                         String[] newKeywords = dt.split(Constants.SEMI_COLON_TOKEN);
                                         return Arrays.stream(newKeywords);
@@ -128,14 +129,14 @@ public class DatasetImportTasklet extends AbstractTasklet {
         //Todo: Here we need to be carefully. We need to know when a dataset has been removed or not.
         //                                      For now we will consider a dataset
         //Todo: as removed is they are not included in one of the releases.
-
-        Set<String> databases = threadSafeList.parallelStream().map(Map.Entry::getValue).collect(Collectors.toSet());
+        System.out.println("count of entries added "+threadSafeList.size());
+        Set<String> databases = threadSafeList.stream().map(Map.Entry::getValue).collect(Collectors.toSet());
         CopyOnWriteArrayList<Map.Entry<List<Dataset>, String>> datasets = new CopyOnWriteArrayList<>();
-        databases.parallelStream().forEach(database -> datasets.add(
+        databases.stream().forEach(database -> datasets.add(
                 new AbstractMap.SimpleEntry<>(datasetAnnotationService.getAllDatasetsByDatabase(database), database)));
 
         CopyOnWriteArrayList<Dataset> removed = new CopyOnWriteArrayList<>();
-        datasets.parallelStream().forEach(x -> x.getKey().parallelStream().forEach(dataset -> {
+        datasets.stream().forEach(x -> x.getKey().stream().forEach(dataset -> {
             Map.Entry<String, String> pair = new AbstractMap.SimpleEntry<>(dataset.getAccession(), dataset.getDatabase());
             if (!threadSafeList.contains(pair)) {
                 removed.add(dataset);
