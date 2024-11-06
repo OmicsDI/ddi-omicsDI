@@ -95,7 +95,10 @@ public class GeneratePxOmicsXML implements IGenerator {
                             dataset = ReaderPxXML.parseDocument(page);
                             if (dataset != null && dataset.getRepository() != null && databases.contains(dataset.getRepository())) {
                                 dataset.setAccession(accession);
-                                entries.add(Transformers.transformAPIDatasetToEntry(dataset));
+                                Entry transFormedEntry = Transformers.transformAPIDatasetToEntry(dataset);
+                                if(!entries.contains(transFormedEntry)){
+                                    entries.add(transFormedEntry);
+                                }
                             }
 
                         } catch (JAXBException e){

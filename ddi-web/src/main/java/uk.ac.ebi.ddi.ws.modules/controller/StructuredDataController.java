@@ -289,6 +289,7 @@ public class StructuredDataController {
 
                 Map<String, Object> mainEntity = new HashMap<>();
                 mainEntity.put("@type", "Dataset");
+                mainEntity.put("minLength", Integer.valueOf(5));
 
                 if (StringUtils.isNotEmpty(dataset.getName())) {
                     mainEntity.put("name", dataset.getName());
