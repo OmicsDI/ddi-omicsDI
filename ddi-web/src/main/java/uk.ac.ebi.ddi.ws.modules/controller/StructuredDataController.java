@@ -286,16 +286,25 @@ public class StructuredDataController {
             if (dataset != null) {
                 result.put("@context", "http://schema.org");
                 result.put("@type", "ItemPage");
+                result.put("minLength", Integer.valueOf(5));
 
                 Map<String, Object> mainEntity = new HashMap<>();
                 mainEntity.put("@type", "Dataset");
                 mainEntity.put("minLength", Integer.valueOf(5));
 
                 if (StringUtils.isNotEmpty(dataset.getName())) {
-                    mainEntity.put("name", dataset.getName());
+                    Map<String, Object> nameEntity = new HashMap<>();
+                    nameEntity.put("type", "string");
+                    nameEntity.put("minLength", Integer.valueOf(5));
+                    nameEntity.put("name", dataset.getName());
+                    mainEntity.put("name", nameEntity);
                 }
                 if (StringUtils.isNotEmpty(dataset.getDescription())) {
-                    mainEntity.put("description", Jsoup.parse(dataset.getDescription()).text());
+                    Map<String, Object> descriptionEntity = new HashMap<>();
+                    descriptionEntity.put("type", "string");
+                    descriptionEntity.put("minLength", Integer.valueOf(5));
+                    descriptionEntity.put("description", Jsoup.parse(dataset.getDescription()).text());
+                    mainEntity.put("description", descriptionEntity);
                 }
 
                 try {
