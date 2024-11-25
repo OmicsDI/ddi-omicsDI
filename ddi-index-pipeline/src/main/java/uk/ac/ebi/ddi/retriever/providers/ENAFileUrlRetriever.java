@@ -20,10 +20,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ENAFileUrlRetriever extends DatasetFileUrlRetriever {
 
@@ -42,7 +40,8 @@ public class ENAFileUrlRetriever extends DatasetFileUrlRetriever {
             result.addAll(getReadRunFiles(accession));
             result.addAll(getAnalysisFiles(accession));
             result.addAll(getAssemblyFiles(accession));
-            result.addAll(getWgsFiles(accession));
+            //TODO: WGS Files links are not fetching any results
+            //result.addAll(getWgsFiles(accession));
         } catch (URISyntaxException ex) {
             LOGGER.error("uri syntax exception in get all dataset " +
                     "files method of ena file retriever with acc {}, ", accession, ex);
@@ -69,12 +68,12 @@ public class ENAFileUrlRetriever extends DatasetFileUrlRetriever {
 
         if (files.getBody() != null) {
             for (JsonNode node : files.getBody()) {
-                result.addAll(Arrays.asList(node.get("fastq_ftp").asText().split(";")));
+                result.addAll(Arrays.stream(node.get("fastq_ftp").asText().split(";")).map(links -> "ftp://" + links).collect(Collectors.toList()));
+                //result.addAll(Arrays.asList(node.get("fastq_ftp").asText().split(";")));
         /*String fastqAspera = node.get("fastq_aspera").asText();
         String fastqGalaxy = node.get("fastq_galaxy").asText();*/
             }
         }
-
         return result;
     }
 
@@ -96,10 +95,9 @@ public class ENAFileUrlRetriever extends DatasetFileUrlRetriever {
 
         if (files.getBody() != null) {
             for (JsonNode node : files.getBody()) {
-                result.addAll(Arrays.asList(node.get("submitted_ftp").asText().split(";")));
+                result.addAll(Arrays.stream(node.get("submitted_ftp").asText().split(";")).map(links -> "ftp://" + links).collect(Collectors.toList()));
             }
         }
-
         return result;
     }
 
@@ -115,25 +113,23 @@ public class ENAFileUrlRetriever extends DatasetFileUrlRetriever {
                 .setParameter("limit", "0")
                 .setParameter("format", "json")
                 .build();
-        ResponseEntity<JsonNode> files = execute(x -> restTemplate.getForEntity(uri, JsonNode.class));
-
-        if (files.getBody() != null) {
-            for (JsonNode node : files.getBody()) {
-                String acc = node.get("accession").textValue();
-                URI viewUri = new URIBuilder()
-                        .setScheme("https")
-                        .setHost("www.ebi.ac.uk/ena/data/view")
-                        .setPath("/" + acc + ".1&display=xml")
-                        .build();
-                ResponseEntity<String> assemblyFiles = execute(x -> restTemplate
-                        .getForEntity(viewUri, String.class));
-                XPath xPath = XPathFactory.newInstance().newXPath();
-                result.add(xPath.evaluate("ROOT/ASSEMBLY/ASSEMBLY_LINKS/ASSEMBLY_LINK/URL_LINK/URL",
-                        new InputSource(new StringReader(assemblyFiles.getBody()))));
-                assemblyFiles.getStatusCode();
+            ResponseEntity<JsonNode> files = execute(x -> restTemplate.getForEntity(uri, JsonNode.class));
+            if (files != null && files.getBody() != null) {
+                for (JsonNode node : files.getBody()) {
+                    String acc = node.get("accession").textValue();
+                    URI viewUri = new URIBuilder()
+                          .setScheme("https")
+                          .setHost("www.ebi.ac.uk/ena/data/view")
+                          .setPath("/" + acc + ".1&display=xml")
+                          .build();
+                    ResponseEntity<String> assemblyFiles = execute(x -> restTemplate
+                          .getForEntity(viewUri, String.class));
+                    XPath xPath = XPathFactory.newInstance().newXPath();
+                    result.add(xPath.evaluate("ROOT/ASSEMBLY/ASSEMBLY_LINKS/ASSEMBLY_LINK/URL_LINK/URL",
+                                              new InputSource(new StringReader(assemblyFiles.getBody()))));
+                    assemblyFiles.getStatusCode();
+                }
             }
-        }
-
         return result;
     }
 
@@ -151,7 +147,7 @@ public class ENAFileUrlRetriever extends DatasetFileUrlRetriever {
                 .build();
         ResponseEntity<JsonNode> files = execute(x -> restTemplate.getForEntity(uri, JsonNode.class));
 
-        if (files.getBody() != null) {
+        if (files != null && files.getBody() != null) {
             for (JsonNode node : files.getBody()) {
                 result.add(node.get("embl_file").textValue());
                 result.add(node.get("fasta_file").textValue());

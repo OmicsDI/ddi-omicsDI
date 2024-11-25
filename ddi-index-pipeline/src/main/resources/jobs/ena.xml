@@ -24,7 +24,7 @@
 
     <batch:job id="ddiImportJob" xmlns="http://www.springframework.org/schema/batch">
 
-        <batch:step id="copyFileFromResource" parent="parentStep" next="validateXMLStep">
+       <batch:step id="copyFileFromResource" parent="parentStep" next="validateXMLStep">
            <batch:tasklet>
                <bean:bean id="copyFileToDirectoryTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CopyFilesWithPatternFromSourceTasklet">
                    <bean:property name="inputDirectory"      value="file:${ddi.common.ena.source.directory}"/>
@@ -98,7 +98,7 @@
                 <bean:bean id="retrieveFileUrlStep" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.dataset.DatasetFileUrlRetrieveTasklet">
                     <bean:property name="datasetService" ref="datasetService" />
                     <bean:property name="databaseDetailService" ref="databaseDetailService" />
-                    <bean:property name="overwrite" value="false" />
+                    <bean:property name="overwrite" value="true" />
                     <bean:property name="databaseName" value="${ddi.common.ena.database.name}" />
                 </bean:bean>
             </batch:tasklet>
