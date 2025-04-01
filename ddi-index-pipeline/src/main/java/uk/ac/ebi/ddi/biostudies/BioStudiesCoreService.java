@@ -76,7 +76,9 @@ public class BioStudiesCoreService {
             final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             String line;
             while ((line = br.readLine()) != null) {
+                System.out.println("line number looped");
                 final DocSubmission submission = objectMapper.readValue(line, DocSubmission.class);
+                System.out.println("DocSubmission parsed "+submission.getAccNo());
                 saveEntry(submission, repository, omicsType);
             }
         } catch (IOException e) {
@@ -91,6 +93,7 @@ public class BioStudiesCoreService {
         if (submission.getSection().getType().equals("Study")) {
             Dataset dataset = transformSubmissionDataset(submission, repository, omicsType);
             saveMetadataDetails(submission, repository, dataset);
+            System.out.println("saveMetadataDetails for entry "+submission.getAccNo());
             if (!dataset.getAdditional().containsKey("additional_accession")) {
                 updateDataset(dataset);
             } else {
@@ -106,7 +109,9 @@ public class BioStudiesCoreService {
                     }
                     updateDataset(dataset);
                 } else {
+                    System.out.println("before updateDataset entry "+submission.getAccNo());
                     updateDataset(dataset);
+                    System.out.println("after updateDataset entry "+submission.getAccNo());
                 }
             }
         }
@@ -115,8 +120,12 @@ public class BioStudiesCoreService {
     private void saveMetadataDetails(DocSubmission submission, String repository, Dataset dataset) {
         DocSection topLevelSection = submission.getSection();
         if(repository.equalsIgnoreCase("biostudies-literature")){
-            dataset.addAdditionalField(DSField.Additional.PUBMED_ABSTRACT.key(),findAttributeByName(topLevelSection.getAttributes(), "Abstract").getValue());
-            dataset.addAdditionalField(DSField.Additional.PUBMED_TITLE.key(),findAttributeByName(topLevelSection.getAttributes(), "Title").getValue());
+            if(attributeHasValue(findAttributeByName(topLevelSection.getAttributes(), "Abstract"))) {
+                dataset.addAdditionalField(DSField.Additional.PUBMED_ABSTRACT.key(),findAttributeByName(topLevelSection.getAttributes(), "Abstract").getValue());
+            }
+            if(attributeHasValue(findAttributeByName(topLevelSection.getAttributes(), "Title"))) {
+                dataset.addAdditionalField(DSField.Additional.PUBMED_TITLE.key(),findAttributeByName(topLevelSection.getAttributes(), "Title").getValue());
+            }
             for (DocSection section : topLevelSection.getSections()) {
                 switch (section.getType()) {
                 case "Funding" -> saveFundingFields(section,dataset);
