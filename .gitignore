@@ -1,4 +1,5 @@
 /.idea/
+.m2
 /.m2/
 /*/target/
 /ddi-commons/ddi-commons.iml
