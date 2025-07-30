@@ -62,8 +62,10 @@ public class DatabaseDetailService {
     }
 
     //** source -> name
-    public String retriveAnchorName(String value){
-        return sourceToName.get(value);
+    public String retriveAnchorName(String value) {
+        return sourceToName.entrySet().stream()
+                           .filter(e -> e.getKey().equalsIgnoreCase(value))
+                           .map(Map.Entry::getValue).findFirst().orElse(null);
     }
 
     //** source -> name
