@@ -16,8 +16,8 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.data.mongo.version>3.0.3.RELEASE</spring.data.mongo.version>
         <spring.version>6.0.8</spring.version>
@@ -27,7 +27,6 @@
         <woodstox.version>4.4.1</woodstox.version>
         <fastutil.version>6.5.1</fastutil.version>
         <common.cli.version>1.2</common.cli.version>
-        <java.version>17</java.version>
         <spring.boot.version>3.0.4</spring.boot.version>
     </properties>
 
