@@ -28,11 +28,10 @@ import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static uk.ac.ebi.ddi.ddidomaindb.dataset.DSField.Additional.DATASET_FILE;
 
 /**
  * @author Yasset Perez-Riverol (ypriverol@gmail.com)
@@ -198,12 +197,33 @@ public class DDIDatasetAnnotationService {
      * @param dbDataset
      */
     private void insertDataset(Dataset dbDataset) {
-        dbDataset = datasetService.save(dbDataset);
+        try{
+            dbDataset = datasetService.save(dbDataset);
+        } catch (Exception e) {
+            Set<String> dsFileField = dbDataset.getAdditionalField(DATASET_FILE.key());
+            dbDataset.addAdditional(DATASET_FILE.key(), getRevisedHashset(dsFileField, 100));
+            datasetService.save(dbDataset);
+        }
         if (dbDataset.getId() != null) {
             statusService.save(new DatasetStatus(dbDataset.getAccession(), dbDataset.getDatabase(),
                     dbDataset.getInitHashCode(), getDate(), DatasetCategory.INSERTED.getType())
             );
         }
+    }
+
+    private Set getRevisedHashset(Set valuesSet , int maxCount){
+        if (valuesSet.size() > maxCount) {
+            Iterator<String> it = valuesSet.iterator();
+            int count = 0;
+            while (it.hasNext()) {
+                it.next();
+                count++;
+                if (count > 50) {
+                    it.remove();
+                }
+            }
+        }
+       return valuesSet;
     }
 
     public Integer findDataset(Entry dataset) {

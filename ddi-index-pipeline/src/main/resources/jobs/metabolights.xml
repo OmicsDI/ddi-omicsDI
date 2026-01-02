@@ -23,16 +23,12 @@
 
         <batch:job id="ddiImportJob" xmlns="http://www.springframework.org/schema/batch">
 
-            <batch:step id="downloadFilesStep" parent="parentStep" next="validateXMLStep">
+            <batch:step id="copyFileFromResource" parent="parentStep" next="validateXMLStep">
                 <batch:tasklet>
-                    <bean:bean id="downloadFilesTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.DownloadFilesFromFTPTasklet">
-                        <bean:property name="server" value="${ddi.common.metabolights.ftp.server}" />
-                        <bean:property name="user" value="${ddi.common.metabolights.ftp.user}" />
-                        <bean:property name="password" value="${ddi.common.metabolights.ftp.password}" />
-                        <bean:property name="port" value="${ddi.common.metabolights.ftp.port}" />
-                        <bean:property name="pattern" value="${ddi.common.metabolights.ftp.pattern}" />
-                        <bean:property name="sourceDirectory" value="${ddi.common.metabolights.ftp.folder}" />
-                        <bean:property name="targetDirectory" value="file:${ddi.common.original.directory}/${ddi.common.metaboligths.database.index}" />
+                    <bean:bean id="copyFileToDirectoryTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CopyFilesWithPatternFromSourceTasklet">
+                        <bean:property name="inputDirectory"      value="file:${ddi.common.metabolights.source.directory}"/>
+                        <bean:property name="outputDirectory" value="file:${ddi.common.original.directory}/${ddi.common.metabolights.database.index}"/>
+                        <bean:property name="pattern" value="${ddi.common.original.pattern}" />
                     </bean:bean>
                 </batch:tasklet>
             </batch:step>
@@ -40,7 +36,7 @@
             <batch:step id="validateXMLStep" parent="parentStep" next="splitterStep">
                 <batch:tasklet>
                     <bean:bean id="validateEbEXmlTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.validation.ValidationOriginalDataTasklet">
-                        <bean:property name="directory" value="${ddi.common.original.directory}/${ddi.common.metaboligths.database.index}"/>
+                        <bean:property name="directory" value="${ddi.common.original.directory}/${ddi.common.metabolights.database.index}"/>
                         <bean:property name="reportName" value="${ddi.common.original.report.name}"/>
                     </bean:bean>
                 </batch:tasklet>
@@ -49,9 +45,9 @@
             <batch:step id="splitterStep" parent="parentStep" next="importDataStep">
                 <batch:tasklet>
                     <bean:bean id="splitterTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.SplitterFromSource">
-                        <bean:property name="inputDirectory"  value="file:${ddi.common.original.directory}/${ddi.common.metaboligths.database.index}"/>
-                        <bean:property name="outputDirectory" value="file:${ddi.common.data.directory}/${ddi.common.metaboligths.database.index}"/>
-                        <bean:property name="originalPrefix"  value="${ddi.common.metabolights.ftp.pattern}" />
+                        <bean:property name="inputDirectory"  value="file:${ddi.common.original.directory}/${ddi.common.metabolights.database.index}"/>
+                        <bean:property name="outputDirectory" value="file:${ddi.common.data.directory}/${ddi.common.metabolights.database.index}"/>
+                        <bean:property name="originalPrefix"  value="${ddi.common.original.pattern}" />
                         <bean:property name="numberEntries"   value="${ddi.common.multiple.file.number.entries}"/>
                         <bean:property name="filePrefix"      value="${ddi.common.metabolights.prefix}" />
                     </bean:bean>
@@ -61,10 +57,10 @@
             <batch:step id="importDataStep" parent="parentStep" next="annotationFiles">
                 <batch:tasklet>
                     <bean:bean id="DataImportTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.database.DatasetImportTasklet">
-                        <bean:property name="inputDirectory" value="file:${ddi.common.data.directory}/${ddi.common.metaboligths.database.index}"/>
+                        <bean:property name="inputDirectory" value="file:${ddi.common.data.directory}/${ddi.common.metabolights.database.index}"/>
                         <bean:property name="datasetAnnotationService" ref="datasetAnnotationService" />
                         <bean:property name="databaseAnnotationService" ref="databaseAnnotationService" />
-                        <bean:property name="databaseName" value="${ddi.common.metaboligths.database.name}" />
+                        <bean:property name="databaseName" value="${ddi.common.metabolights.database.name}" />
                     </bean:bean>
                 </batch:tasklet>
             </batch:step>
@@ -72,7 +68,7 @@
             <batch:step id="annotationFiles" parent="parentStep" next="enrichmentStep">
                 <batch:tasklet>
                     <bean:bean id="annotationTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.annotation.AnnotationXMLTasklet">
-                        <bean:property name="databaseName" value="${ddi.common.metaboligths.database.name}"/>
+                        <bean:property name="databaseName" value="${ddi.common.metabolights.database.name}"/>
                         <bean:property name="datasetAnnotationService" ref="datasetAnnotationService" />
                     </bean:bean>
                 </batch:tasklet>
@@ -81,7 +77,7 @@
             <batch:step id="enrichmentStep" parent="parentStep" next="datasetFileRetrieve">
                 <batch:tasklet>
                     <bean:bean id="enrichmentTask" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.enrichment.EnrichmentXMLTasklet">
-                        <bean:property name="databaseName" value="${ddi.common.metaboligths.database.name}" />
+                        <bean:property name="databaseName" value="${ddi.common.metabolights.database.name}" />
                         <bean:property name="annotationService" ref="annotationService"/>
                         <bean:property name="datasetAnnotationService" ref="datasetAnnotationService" />
                         <bean:property name="databaseAnnotationService" ref="databaseAnnotationService" />
@@ -95,7 +91,7 @@
                         <bean:property name="datasetService" ref="datasetService" />
                         <bean:property name="databaseDetailService" ref="databaseDetailService" />
                         <bean:property name="overwrite" value="false" />
-                        <bean:property name="databaseName" value="${ddi.common.metaboligths.database.name}" />
+                        <bean:property name="databaseName" value="${ddi.common.metabolights.database.name}" />
                     </bean:bean>
                 </batch:tasklet>
             </batch:step>
@@ -103,7 +99,7 @@
             <batch:step id="cleanIPreProdStep" next="moveToProductionStep" parent="parentStep">
                 <batch:tasklet>
                     <bean:bean id="cleanIPreProdTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CleanDirectoryTasklet">
-                        <bean:property name="inputDirectory" value="file:${ddi.common.preprod.directory}/${ddi.common.metaboligths.database.index}" />
+                        <bean:property name="inputDirectory" value="file:${ddi.common.preprod.directory}/${ddi.common.metabolights.database.index}" />
                     </bean:bean>
                 </batch:tasklet>
             </batch:step>
@@ -111,8 +107,8 @@
             <batch:step id="moveToProductionStep" parent="parentStep" next="cleanIProdFolder">
                 <batch:tasklet>
                     <bean:bean id="generateFromSourceTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.database.DatasetExportTasklet">
-                        <bean:property name="databaseName"    value="${ddi.common.metaboligths.database.name}" />
-                        <bean:property name="outputDirectory" value="file:${ddi.common.preprod.directory}/${ddi.common.metaboligths.database.index}"/>
+                        <bean:property name="databaseName"    value="${ddi.common.metabolights.database.name}" />
+                        <bean:property name="outputDirectory" value="file:${ddi.common.preprod.directory}/${ddi.common.metabolights.database.index}"/>
                         <bean:property name="filePrefix"      value="${ddi.common.metabolights.prefix}" />
                         <bean:property name="numberEntries"   value="${ddi.common.multiple.file.number.entries}" />
                         <bean:property name="databaseService" ref="databaseAnnotationService" />
@@ -124,7 +120,7 @@
             <batch:step id="cleanIProdFolder" next="copyIFiletoProd" parent="parentStep">
                 <batch:tasklet>
                     <bean:bean id="cleanIProdTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CleanDirectoryTasklet">
-                        <bean:property name="inputDirectory" value="file:${ddi.common.prod.directory}/${ddi.common.metaboligths.database.index}" />
+                        <bean:property name="inputDirectory" value="file:${ddi.common.prod.directory}/${ddi.common.metabolights.database.index}" />
                     </bean:bean>
                 </batch:tasklet>
             </batch:step>
@@ -132,8 +128,8 @@
             <batch:step id="copyIFiletoProd" parent="parentStep">
                 <batch:tasklet>
                     <bean:bean id="copyIFileToDirectoryTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CopyFilesWithPatternFromSourceTasklet">
-                        <bean:property name="inputDirectory"      value="file:${ddi.common.preprod.directory}/${ddi.common.metaboligths.database.index}"/>
-                        <bean:property name="outputDirectory" value="file:${ddi.common.prod.directory}/${ddi.common.metaboligths.database.index}"/>
+                        <bean:property name="inputDirectory"      value="file:${ddi.common.preprod.directory}/${ddi.common.metabolights.database.index}"/>
+                        <bean:property name="outputDirectory" value="file:${ddi.common.prod.directory}/${ddi.common.metabolights.database.index}"/>
                         <bean:property name="pattern" value="${ddi.common.original.pattern}" />
                     </bean:bean>
                 </batch:tasklet>
@@ -147,7 +143,7 @@
             <batch:step id="importTerms" parent="parentStep" next="similarityStep">
                 <batch:tasklet>
                     <bean:bean id="importTermsTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.similarity.UpdateTermsTasklet">
-                        <bean:property name="databaseName" value="${ddi.common.metaboligths.database.name}" />
+                        <bean:property name="databaseName" value="${ddi.common.metabolights.database.name}" />
                         <bean:property name="datasetAnnotationService" ref="datasetAnnotationService" />
                         <bean:property name="dataType" >
                             <util:constant static-field="uk.ac.ebi.uk.ac.ebi.ddi.annotation.utils.DataType.METABOLOMICS_DATA"/>
@@ -166,48 +162,6 @@
                         <bean:property name="ddiExpDataImportService" ref="ddiExpDataImportService"/>
                         <bean:property name="ddiExpDataProcessService" ref="ddiExpDataProcessService"/>
                         <bean:property name="expOutputDatasetService" ref="expOutputDatasetService" />
-                    </bean:bean>
-                </batch:tasklet>
-            </batch:step>
-        </batch:job>
-
-        <batch:job id="generationJob" xmlns="http://www.springframework.org/schema/batch">
-
-            <batch:step id="cleanGPreProdStepJob" next="moveToProductionStepJob" parent="parentStep">
-                <batch:tasklet>
-                    <bean:bean id="cleanGPreProdJobTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CleanDirectoryTasklet">
-                        <bean:property name="inputDirectory" value="file:${ddi.common.preprod.directory}/${ddi.common.metaboligths.database.index}" />
-                    </bean:bean>
-                </batch:tasklet>
-            </batch:step>
-
-            <batch:step id="moveToProductionStepJob" parent="parentStep" next="cleanGProdFolder">
-                <batch:tasklet>
-                    <bean:bean id="generateFromSourceJobTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.database.DatasetExportTasklet">
-                        <bean:property name="databaseName" value="${ddi.common.metaboligths.database.name}" />
-                        <bean:property name="outputDirectory" value="file:${ddi.common.preprod.directory}/${ddi.common.metaboligths.database.index}"/>
-                        <bean:property name="filePrefix"      value="${ddi.common.metabolights.prefix}" />
-                        <bean:property name="numberEntries"   value="${ddi.common.multiple.file.number.entries}" />
-                        <bean:property name="databaseService" ref="databaseAnnotationService" />
-                        <bean:property name="datasetAnnotationService"  ref="datasetAnnotationService" />
-                    </bean:bean>
-                </batch:tasklet>
-            </batch:step>
-
-            <batch:step id="cleanGProdFolder" next="copyGFiletoProd" parent="parentStep">
-                <batch:tasklet>
-                    <bean:bean id="cleanGProdTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CleanDirectoryTasklet">
-                        <bean:property name="inputDirectory" value="file:${ddi.common.prod.directory}/${ddi.common.metaboligths.database.index}" />
-                    </bean:bean>
-                </batch:tasklet>
-            </batch:step>
-
-            <batch:step id="copyGFiletoProd" parent="parentStep">
-                <batch:tasklet>
-                    <bean:bean id="copyGFileToDirectoryTasklet" scope="step" class="uk.ac.ebi.ddi.pipeline.indexer.tasklet.io.CopyFilesWithPatternFromSourceTasklet">
-                        <bean:property name="inputDirectory"      value="file:${ddi.common.preprod.directory}/${ddi.common.metaboligths.database.index}"/>
-                        <bean:property name="outputDirectory" value="file:${ddi.common.prod.directory}/${ddi.common.metaboligths.database.index}"/>
-                        <bean:property name="pattern" value="${ddi.common.original.pattern}" />
                     </bean:bean>
                 </batch:tasklet>
             </batch:step>
