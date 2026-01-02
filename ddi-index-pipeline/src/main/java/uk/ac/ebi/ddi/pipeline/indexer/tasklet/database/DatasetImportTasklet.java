@@ -129,7 +129,6 @@ public class DatasetImportTasklet extends AbstractTasklet {
         //Todo: Here we need to be carefully. We need to know when a dataset has been removed or not.
         //                                      For now we will consider a dataset
         //Todo: as removed is they are not included in one of the releases.
-        System.out.println("count of entries added "+threadSafeList.size());
         Set<String> databases = threadSafeList.stream().map(Map.Entry::getValue).collect(Collectors.toSet());
         CopyOnWriteArrayList<Map.Entry<List<Dataset>, String>> datasets = new CopyOnWriteArrayList<>();
         databases.stream().forEach(database -> datasets.add(
